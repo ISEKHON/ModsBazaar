@@ -47,19 +47,22 @@ export interface ModDetails {
   _id: string;
   name: string;
   slug: string;
+  description?: string;
   thumbnail: string;
   type: 'free' | 'paid' | 'unlock';
   price?: number;
-  shortDescription: string;
+  shortDescription?: string;
   downloads: number;
   rating: number;
-  ratingCount: number;
+  ratingCount?: number;
+  totalReviews?: number;
   game: string;
   category: string;
-  author: {
+  author?: {
     name: string;
   };
-  publishedAt: string;
+  publishedAt?: string;
+  createdAt?: string;
 }
 
 export const profileAPI = {
@@ -86,8 +89,26 @@ export const profileAPI = {
   // Get user's purchased mods with details
   async getPurchasedMods(): Promise<ModDetails[]> {
     try {
-      // For now, return empty array since purchased mods functionality isn't fully implemented
-      // In the future, this would call a /user/purchased endpoint
+      const response = await api.get('/user/purchases');
+      if (response.data.status === 'success') {
+        const purchases = response.data.data.purchases || [];
+        // Transform and validate the data to ensure required fields exist
+        return purchases.map((mod: any): ModDetails => ({
+          _id: mod._id,
+          name: mod.name || 'Unknown Mod',
+          description: mod.description || 'No description available',
+          thumbnail: mod.thumbnail || '/default-thumbnail.jpg',
+          type: mod.type || 'free',
+          game: mod.game || 'Unknown',
+          category: mod.category || 'Other',
+          price: mod.price || 0,
+          slug: mod.slug || '',
+          downloads: mod.downloads || 0,
+          rating: mod.reviews?.averageRating || 0,
+          totalReviews: mod.reviews?.totalReviews || 0,
+          createdAt: mod.createdAt || new Date().toISOString()
+        }));
+      }
       return [];
     } catch (error) {
       console.error('Failed to fetch purchased mods:', error);

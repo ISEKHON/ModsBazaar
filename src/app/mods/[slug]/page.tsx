@@ -180,6 +180,12 @@ export default function ModDetailPage() {
           const modData = response.data.data.mod
           setMod(modData)
           setDownloadCount(modData.downloads)
+          
+          // Set unlock status based on canDownload for unlock mods
+          if (modData.type === 'unlock' && modData.canDownload) {
+            setIsUnlocked(true)
+          }
+          
           console.log('Mod loaded successfully:', modData.name)
           
           // Load reviews for everyone
@@ -259,17 +265,32 @@ export default function ModDetailPage() {
     }
   }
 
-  const handleUnlockCode = () => {
-    if (!mod?.unlockCode) return
-    
-    if (enteredCode.trim().toUpperCase() === mod.unlockCode.toUpperCase()) {
-      setIsUnlocked(true)
-      setShowUnlockModal(false)
-      setCodeError('')
-      setEnteredCode('')
-      toast.success('Mod unlocked successfully!')
-    } else {
-      setCodeError('Invalid unlock code. Please try again.')
+  const handleUnlockCode = async () => {
+    if (!mod || !enteredCode.trim()) return
+
+    try {
+      const response = await api.post('/payment/unlock', {
+        modId: mod._id,
+        unlockCode: enteredCode.trim()
+      })
+
+      if (response.data.status === 'success') {
+        setIsUnlocked(true)
+        setShowUnlockModal(false)
+        setEnteredCode('')
+        setCodeError('')
+        toast.success(response.data.message)
+      }
+    } catch (error: any) {
+      console.error('Failed to unlock mod:', error)
+      const errorMessage = error.response?.data?.message || 'Failed to unlock mod'
+      setCodeError(errorMessage)
+      
+      if (errorMessage === 'Invalid unlock code') {
+        toast.error('Invalid unlock code. Please try again.')
+      } else {
+        toast.error(errorMessage)
+      }
     }
   }
 
@@ -1865,6 +1886,87 @@ export default function ModDetailPage() {
                   disabled={isSubmittingEdit}
                 >
                   {isSubmittingEdit ? 'Saving...' : 'Save Changes'}
+                </motion.button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Unlock Modal */}
+      {showUnlockModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.3 }}
+            className="bg-gaming-card rounded-xl p-6 w-full max-w-md border border-gaming-border"
+          >
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-gradient-to-r from-neon-purple to-neon-pink rounded-full mx-auto mb-4 flex items-center justify-center">
+                <Unlock className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">Unlock Mod</h3>
+              <p className="text-muted-foreground">
+                Enter the unlock code to access <span className="text-neon-purple font-semibold">{mod?.name}</span>
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">Unlock Code</label>
+                <input
+                  type="text"
+                  value={enteredCode}
+                  onChange={(e) => {
+                    setEnteredCode(e.target.value)
+                    setCodeError('')
+                  }}
+                  className="w-full px-4 py-3 bg-gaming-border border border-gaming-border rounded-lg focus:outline-none focus:border-neon-purple transition-colors text-center text-lg tracking-wider"
+                  placeholder="Enter unlock code"
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      handleUnlockCode()
+                    }
+                  }}
+                />
+                {codeError && (
+                  <p className="text-red-400 text-sm mt-2">{codeError}</p>
+                )}
+              </div>
+
+              <div className="bg-gaming-darker rounded-lg p-4">
+                <h4 className="font-semibold text-neon-purple mb-2">How to get unlock codes:</h4>
+                <ul className="text-sm text-muted-foreground space-y-1">
+                  <li>• Contact the mod creator directly</li>
+                  <li>• Check mod description for instructions</li>
+                  <li>• Follow the creator on social media</li>
+                  <li>• Join our Discord community</li>
+                </ul>
+              </div>
+
+              <div className="flex space-x-3">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    setShowUnlockModal(false)
+                    setEnteredCode('')
+                    setCodeError('')
+                  }}
+                  className="flex-1 py-3 bg-gaming-border hover:bg-gaming-border/80 rounded-lg text-white font-semibold transition-colors"
+                >
+                  Cancel
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleUnlockCode}
+                  disabled={!enteredCode.trim()}
+                  className="flex-1 py-3 bg-gradient-to-r from-neon-purple to-neon-pink rounded-lg text-white font-semibold hover-glow transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Unlock
                 </motion.button>
               </div>
             </div>

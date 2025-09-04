@@ -18,7 +18,8 @@ import {
   TrendingUp,
   Download,
   Eye,
-  Star
+  Star,
+  CreditCard
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import api from '@/lib/api'
@@ -108,6 +109,12 @@ export default function AdminDashboard() {
       href: '/admin/mods',
       icon: Package,
       description: 'Manage published mods'
+    },
+    {
+      title: 'Purchases',
+      href: '/admin/purchases',
+      icon: CreditCard,
+      description: 'Manage user purchases'
     },
     {
       title: 'Analytics',

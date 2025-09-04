@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
-import { User, Download, Heart, ShoppingBag, Settings, Star, Calendar, Eye, LogOut, Edit, Mail, Shield, Package, Gamepad2, Upload, X, Trash2, Play, Pause } from 'lucide-react'
+import { User, Download, Heart, ShoppingBag, Settings, Star, Calendar, Eye, LogOut, Edit, Mail, Shield, Package, Gamepad2, Upload, X, Trash2, Play, Pause, ExternalLink } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import Navbar from '@/components/layout/Navbar'
@@ -610,6 +610,10 @@ export default function ProfilePage() {
                               <span className="font-semibold">{favoriteMods?.length || 0}</span>
                             </div>
                             <div className="flex justify-between">
+                              <span className="text-muted-foreground">Purchased Mods:</span>
+                              <span className="font-semibold">{purchasedMods?.length || 0}</span>
+                            </div>
+                            <div className="flex justify-between">
                               <span className="text-muted-foreground">Total Spent:</span>
                               <span className="font-semibold text-neon-green">${profileData?.totalSpent?.toFixed(2) || '0.00'}</span>
                             </div>
@@ -631,23 +635,58 @@ export default function ProfilePage() {
                           {purchasedMods.map((mod) => (
                             <div key={mod._id} className="bg-gaming-darker p-6 rounded-lg border border-gaming-border">
                               <div className="flex items-center justify-between">
-                                <div>
-                                  <h3 className="text-lg font-semibold mb-2">{mod.name}</h3>
-                                  <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                                    <span>Category: {mod.category}</span>
-                                    <span>Game: {mod.game}</span>
-                                    <span>Downloads: {mod.downloads}</span>
+                                <div className="flex-1">
+                                  <div className="flex items-center gap-4 mb-2">
+                                    {mod.thumbnail && (
+                                      <img 
+                                        src={mod.thumbnail} 
+                                        alt={mod.name}
+                                        className="w-16 h-16 object-cover rounded-lg border border-gaming-border"
+                                      />
+                                    )}
+                                    <div>
+                                      <h3 className="text-lg font-semibold mb-1">{mod.name}</h3>
+                                      <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+                                        <span>Category: {mod.category}</span>
+                                        <span>Game: {mod.game}</span>
+                                        <span>Downloads: {mod.downloads?.toLocaleString()}</span>
+                                        {mod.rating > 0 && (
+                                          <div className="flex items-center">
+                                            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
+                                            <span>{mod.rating.toFixed(1)}</span>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
                                   </div>
+                                  {mod.description && (
+                                    <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
+                                      {mod.description}
+                                    </p>
+                                  )}
                                 </div>
-                                <div className="text-right">
-                                  <div className="text-lg font-bold text-neon-green">${mod.price}</div>
-                                  <motion.button
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    className="mt-2 px-4 py-2 bg-gradient-to-r from-neon-blue to-neon-purple rounded-lg text-white text-sm hover-glow transition-all duration-300"
-                                  >
-                                    Download Again
-                                  </motion.button>
+                                <div className="text-right ml-4">
+                                  <div className="text-lg font-bold text-neon-green mb-2">${mod.price}</div>
+                                  <div className="space-y-2">
+                                    <motion.button
+                                      whileHover={{ scale: 1.05 }}
+                                      whileTap={{ scale: 0.95 }}
+                                      onClick={() => window.open(`/mods/${mod.slug}`, '_blank')}
+                                      className="w-full px-4 py-2 bg-gradient-to-r from-neon-blue to-neon-purple rounded-lg text-white text-sm hover-glow transition-all duration-300 flex items-center justify-center gap-2"
+                                    >
+                                      <Download className="h-4 w-4" />
+                                      Download Again
+                                    </motion.button>
+                                    <motion.button
+                                      whileHover={{ scale: 1.05 }}
+                                      whileTap={{ scale: 0.95 }}
+                                      onClick={() => window.open(`/mods/${mod.slug}`, '_blank')}
+                                      className="w-full px-4 py-2 bg-gaming-border hover:bg-gaming-lighter rounded-lg text-white text-sm transition-all duration-300 flex items-center justify-center gap-2"
+                                    >
+                                      <ExternalLink className="h-4 w-4" />
+                                      View Details
+                                    </motion.button>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -675,7 +714,9 @@ export default function ProfilePage() {
                           {favoriteMods.map((mod) => (
                             <div key={mod._id} className="bg-gaming-darker p-6 rounded-lg border border-gaming-border">
                               <h3 className="text-lg font-semibold mb-2">{mod.name}</h3>
-                              <p className="text-muted-foreground text-sm mb-3">by {mod.author.name}</p>
+                              {mod.author && (
+                                <p className="text-muted-foreground text-sm mb-3">by {mod.author.name}</p>
+                              )}
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-2">
                                   <Star className="h-4 w-4 text-yellow-400 fill-current" />
