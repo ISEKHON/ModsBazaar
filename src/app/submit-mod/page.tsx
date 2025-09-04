@@ -114,6 +114,18 @@ export default function SubmitModPage() {
     setValue('conflicts', conflicts.filter(c => c.trim() !== ''))
   }, [conflicts, setValue])
 
+  // Clear price and unlock code based on type changes
+  useEffect(() => {
+    if (watchType === 'free') {
+      setValue('price', undefined)
+      setValue('unlockCode', undefined)
+    } else if (watchType === 'unlock') {
+      setValue('price', undefined)
+    } else if (watchType === 'paid') {
+      setValue('unlockCode', undefined)
+    }
+  }, [watchType, setValue])
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -186,14 +198,25 @@ export default function SubmitModPage() {
     setIsSubmitting(true)
     
     try {
+      // Clean data based on type
+      const cleanedData = { ...data }
+      if (cleanedData.type === 'free') {
+        cleanedData.price = undefined
+        cleanedData.unlockCode = undefined
+      } else if (cleanedData.type === 'unlock') {
+        cleanedData.price = undefined
+      } else if (cleanedData.type === 'paid') {
+        cleanedData.unlockCode = undefined
+      }
+
       // Basic validation
-      const validationErrors = validateForm(data)
+      const validationErrors = validateForm(cleanedData)
       if (validationErrors.length > 0) {
         validationErrors.forEach(error => toast.error(error))
         return
       }
 
-      const response = await api.post('/submissions', data)
+      const response = await api.post('/submissions', cleanedData)
       
       if (response.data.status === 'success') {
         toast.success('Mod submitted successfully! It will be reviewed by our team.')

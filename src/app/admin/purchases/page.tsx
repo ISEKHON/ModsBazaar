@@ -148,7 +148,7 @@ export default function AdminPurchasesPage() {
     }
 
     try {
-      const response = await api.delete(`/admin/purchases/${purchase._id}?userId=${purchase.user._id}&modId=${purchase.mod._id}`)
+      const response = await api.delete(`/admin/purchases/${purchase._id}?userId=${purchase.userId}&modId=${purchase.modId}`)
       
       if (response.data.status === 'success') {
         toast.success('Purchase revoked successfully')
