@@ -1,32 +1,103 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useState } from 'react'
-import { Eye, EyeOff, Mail, Lock, Gamepad2 } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Eye, EyeOff, Mail, Lock, Gamepad2, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
+import { useAuth } from '@/hooks/useAuth'
 
 export default function LoginPage() {
+  const router = useRouter()
+  const { login, isAuthenticated, isLoading: authLoading } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   })
   const [isLoading, setIsLoading] = useState(false)
+  const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({})
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated && !authLoading) {
+      router.push('/')
+    }
+  }, [isAuthenticated, authLoading, router])
+
+  const validateForm = () => {
+    const newErrors: { email?: string; password?: string } = {}
+    
+    if (!formData.email) {
+      newErrors.email = 'Email is required'
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email'
+    }
+    
+    if (!formData.password) {
+      newErrors.password = 'Password is required'
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters'
+    }
+    
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [name]: value
     }))
+    
+    // Clear field-specific error when user starts typing
+    if (errors[name as keyof typeof errors]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: undefined
+      }))
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (!validateForm()) {
+      return
+    }
+    
     setIsLoading(true)
-    // TODO: Implement login logic
-    setTimeout(() => setIsLoading(false), 2000)
+    setErrors({})
+    
+    try {
+      const response = await login(formData)
+      
+      if (response.status === 'success') {
+        toast.success('Welcome back! You are now logged in.')
+        router.push('/')
+      } else {
+        // Handle error response
+        setErrors({ general: response.message || 'Login failed' })
+      }
+    } catch (error: any) {
+      console.error('Login error:', error)
+      
+      // Check if it's a rate limiting error
+      if (error.response?.status === 429 || error.response?.data?.code === 'TOO_MANY_ATTEMPTS') {
+        // Rate limiting error - toast is already shown by interceptor
+        return
+      }
+      
+      // For other errors, show in form
+      const errorMessage = error.response?.data?.message || error.message || 'An unexpected error occurred'
+      setErrors({ general: errorMessage })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -94,6 +165,18 @@ export default function LoginPage() {
 
             {/* Login Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* General Error */}
+              {errors.general && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center space-x-2 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400"
+                >
+                  <AlertCircle className="h-5 w-5 flex-shrink-0" />
+                  <span className="text-sm">{errors.general}</span>
+                </motion.div>
+              )}
+
               <div>
                 <label className="block text-sm font-medium mb-2">Email</label>
                 <div className="relative">
@@ -105,9 +188,20 @@ export default function LoginPage() {
                     onChange={handleInputChange}
                     required
                     placeholder="Enter your email"
-                    className="w-full pl-10 pr-4 py-3 bg-gaming-darker border border-gaming-border rounded-lg focus:outline-none focus:border-neon-blue transition-colors"
+                    className={`w-full pl-10 pr-4 py-3 bg-gaming-darker border rounded-lg focus:outline-none transition-colors ${
+                      errors.email ? 'border-red-500 focus:border-red-500' : 'border-gaming-border focus:border-neon-blue'
+                    }`}
                   />
                 </div>
+                {errors.email && (
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-red-400 text-sm mt-1"
+                  >
+                    {errors.email}
+                  </motion.p>
+                )}
               </div>
 
               <div>
@@ -121,7 +215,9 @@ export default function LoginPage() {
                     onChange={handleInputChange}
                     required
                     placeholder="Enter your password"
-                    className="w-full pl-10 pr-12 py-3 bg-gaming-darker border border-gaming-border rounded-lg focus:outline-none focus:border-neon-blue transition-colors"
+                    className={`w-full pl-10 pr-12 py-3 bg-gaming-darker border rounded-lg focus:outline-none transition-colors ${
+                      errors.password ? 'border-red-500 focus:border-red-500' : 'border-gaming-border focus:border-neon-blue'
+                    }`}
                   />
                   <button
                     type="button"
@@ -131,6 +227,15 @@ export default function LoginPage() {
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
+                {errors.password && (
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-red-400 text-sm mt-1"
+                  >
+                    {errors.password}
+                  </motion.p>
+                )}
               </div>
 
               <div className="flex items-center justify-between">
@@ -147,17 +252,20 @@ export default function LoginPage() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
-                disabled={isLoading}
+                disabled={isLoading || authLoading}
                 className="w-full py-3 bg-gradient-to-r from-neon-blue to-neon-purple rounded-lg text-white font-semibold hover-glow transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading ? (
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                    className="inline-block"
-                  >
-                    <Gamepad2 className="h-5 w-5" />
-                  </motion.div>
+                {isLoading || authLoading ? (
+                  <div className="flex items-center justify-center space-x-2">
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      className="inline-block"
+                    >
+                      <Gamepad2 className="h-5 w-5" />
+                    </motion.div>
+                    <span>Signing In...</span>
+                  </div>
                 ) : (
                   'Sign In'
                 )}

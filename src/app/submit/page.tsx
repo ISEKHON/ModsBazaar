@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { MessageCircle, Star, Zap, Shield, DollarSign, Gift, ExternalLink } from 'lucide-react'
+import { MessageCircle, Star, Zap, Shield, DollarSign, Gift, ExternalLink, Upload } from 'lucide-react'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 
@@ -33,38 +33,92 @@ export default function SubmitPage() {
               </p>
             </motion.div>
 
-            {/* Discord Contact Card */}
+            {/* Submit Options */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="gaming-card p-8 rounded-xl mb-12 text-center"
+              className="grid md:grid-cols-2 gap-8 mb-12"
             >
-              <div className="w-20 h-20 bg-gradient-to-r from-neon-blue to-neon-purple rounded-full mx-auto mb-6 flex items-center justify-center">
-                <MessageCircle className="h-10 w-10 text-white" />
+              {/* Online Submission */}
+              <div className="gaming-card p-8 rounded-xl border-2 border-neon-blue/30 bg-gradient-to-br from-neon-blue/5 to-transparent">
+                <div className="w-16 h-16 bg-gradient-to-r from-neon-blue to-neon-purple rounded-full mb-6 flex items-center justify-center">
+                  <Upload className="h-8 w-8 text-white" />
+                </div>
+                
+                <h3 className="text-2xl font-bold mb-4 text-neon-blue">Submit Online</h3>
+                <p className="text-muted-foreground mb-6">
+                  Use our new online submission form to submit your mod directly through the website. Fast, easy, and automated!
+                </p>
+                
+                <ul className="space-y-3 text-sm mb-6">
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-neon-blue rounded-full"></div>
+                    <span>Direct online submission</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-neon-blue rounded-full"></div>
+                    <span>Automated review process</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-neon-blue rounded-full"></div>
+                    <span>Real-time status tracking</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-neon-blue rounded-full"></div>
+                    <span>Instant notifications</span>
+                  </li>
+                </ul>
+                
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => window.location.href = '/submit-mod'}
+                  className="w-full px-6 py-3 bg-gradient-to-r from-neon-blue to-neon-purple rounded-lg text-white font-bold hover-glow transition-all duration-300"
+                >
+                  Submit Mod Online
+                </motion.button>
               </div>
-              
-              <h2 className="text-3xl font-bold mb-4">
-                <span className="bg-gradient-to-r from-neon-blue to-neon-purple bg-clip-text text-transparent">
-                  Contact Admin Team
-                </span>
-              </h2>
-              
-              <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Join our Discord server and contact our admin team directly. We'll help you get your mod listed quickly, 
-                whether it's free or paid.
-              </p>
-              
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleDiscordClick}
-                className="inline-flex items-center space-x-3 px-8 py-4 bg-gradient-to-r from-neon-blue to-neon-purple rounded-lg text-white font-bold text-lg hover-glow transition-all duration-300"
-              >
-                <MessageCircle className="h-6 w-6" />
-                <span>Join Discord Server</span>
-                <ExternalLink className="h-5 w-5" />
-              </motion.button>
+
+              {/* Discord Contact */}
+              <div className="gaming-card p-8 rounded-xl border-2 border-neon-green/30 bg-gradient-to-br from-neon-green/5 to-transparent">
+                <div className="w-16 h-16 bg-gradient-to-r from-neon-green to-emerald-400 rounded-full mb-6 flex items-center justify-center">
+                  <MessageCircle className="h-8 w-8 text-white" />
+                </div>
+                
+                <h3 className="text-2xl font-bold mb-4 text-neon-green">Contact Admin</h3>
+                <p className="text-muted-foreground mb-6">
+                  Prefer personal assistance? Contact our admin team directly on Discord for manual review and listing.
+                </p>
+                
+                <ul className="space-y-3 text-sm mb-6">
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-neon-green rounded-full"></div>
+                    <span>Personal assistance</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-neon-green rounded-full"></div>
+                    <span>Direct admin contact</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-neon-green rounded-full"></div>
+                    <span>Custom requirements</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-neon-green rounded-full"></div>
+                    <span>Special cases support</span>
+                  </li>
+                </ul>
+                
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleDiscordClick}
+                  className="w-full px-6 py-3 bg-gradient-to-r from-neon-green to-emerald-400 rounded-lg text-white font-bold hover-glow transition-all duration-300"
+                >
+                  Contact on Discord
+                </motion.button>
+              </div>
             </motion.div>
 
             {/* Listing Options */}

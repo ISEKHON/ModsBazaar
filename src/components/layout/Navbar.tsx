@@ -1,13 +1,33 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useState } from 'react'
-import { Menu, X, Download, Gamepad2, User, LogIn } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { Menu, X, Download, Gamepad2, User, LogIn, LogOut, Settings } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/hooks/useAuth'
 import ThemeToggle from '@/components/ui/ThemeToggle'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const [showUserMenu, setShowUserMenu] = useState(false)
+  const userMenuRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
+  const { user, isAuthenticated, isLoading, logout } = useAuth()
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setShowUserMenu(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
 
   const navItems = [
     { name: 'Home', href: '/' },
@@ -16,6 +36,16 @@ export default function Navbar() {
     { name: 'Submit Mod', href: '/submit' },
     { name: 'About', href: '/about' },
   ]
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+      setShowUserMenu(false)
+      router.push('/')
+    } catch (error) {
+      console.error('Logout error:', error)
+    }
+  }
 
   return (
     <motion.nav
@@ -59,27 +89,78 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-4">
             <ThemeToggle />
             
-            <Link href="/login">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center space-x-2 px-4 py-2 gaming-card border border-gaming-border rounded-lg font-medium hover:border-neon-blue transition-colors"
-              >
-                <LogIn className="h-4 w-4" />
-                <span>Sign In</span>
-              </motion.button>
-            </Link>
-            
-            <Link href="/register">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-neon-blue to-neon-purple rounded-lg text-white font-medium hover-glow"
-              >
-                <User className="h-4 w-4" />
-                <span>Sign Up</span>
-              </motion.button>
-            </Link>
+            {isLoading ? (
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+            ) : isAuthenticated && user ? (
+              <div className="relative" ref={userMenuRef}>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex items-center space-x-2 px-4 py-2 gaming-card border border-gaming-border rounded-lg font-medium hover:border-neon-green transition-colors"
+                >
+                  <div className="w-6 h-6 bg-gradient-to-r from-neon-green to-neon-blue rounded-full flex items-center justify-center">
+                    <User className="h-3 w-3 text-black" />
+                  </div>
+                  <span>{user.username}</span>
+                </motion.button>
+
+                {showUserMenu && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="absolute right-0 mt-2 w-48 gaming-card border border-gaming-border rounded-lg shadow-lg z-50"
+                  >
+                    <div className="p-2">
+                      <Link href="/profile" onClick={() => setShowUserMenu(false)}>
+                        <div className="flex items-center space-x-2 px-3 py-2 hover:bg-gaming-darker rounded-lg transition-colors">
+                          <User className="h-4 w-4" />
+                          <span>Profile</span>
+                        </div>
+                      </Link>
+                      <Link href="/settings" onClick={() => setShowUserMenu(false)}>
+                        <div className="flex items-center space-x-2 px-3 py-2 hover:bg-gaming-darker rounded-lg transition-colors">
+                          <Settings className="h-4 w-4" />
+                          <span>Settings</span>
+                        </div>
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center space-x-2 px-3 py-2 hover:bg-red-500/10 text-red-500 rounded-lg transition-colors"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        <span>Logout</span>
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </div>
+            ) : (
+              <>
+                <Link href="/login">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="flex items-center space-x-2 px-4 py-2 gaming-card border border-gaming-border rounded-lg font-medium hover:border-neon-blue transition-colors"
+                  >
+                    <LogIn className="h-4 w-4" />
+                    <span>Sign In</span>
+                  </motion.button>
+                </Link>
+                
+                <Link href="/register">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-neon-blue to-neon-purple rounded-lg text-white font-medium hover-glow"
+                  >
+                    <User className="h-4 w-4" />
+                    <span>Sign Up</span>
+                  </motion.button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -118,18 +199,54 @@ export default function Navbar() {
               <div className="flex items-center space-x-2 mb-2">
                 <ThemeToggle />
               </div>
-              <Link href="/login">
-                <button className="w-full flex items-center space-x-2 px-4 py-2 gaming-card border border-gaming-border rounded-lg font-medium hover:border-neon-blue transition-colors">
-                  <LogIn className="h-4 w-4" />
-                  <span>Sign In</span>
-                </button>
-              </Link>
-              <Link href="/register">
-                <button className="w-full flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-neon-blue to-neon-purple rounded-lg text-white font-medium">
-                  <User className="h-4 w-4" />
-                  <span>Sign Up</span>
-                </button>
-              </Link>
+              
+              {isAuthenticated && user ? (
+                <>
+                  <div className="flex items-center space-x-2 px-3 py-2 gaming-card border border-gaming-border rounded-lg">
+                    <div className="w-6 h-6 bg-gradient-to-r from-neon-green to-neon-blue rounded-full flex items-center justify-center">
+                      <User className="h-3 w-3 text-black" />
+                    </div>
+                    <span className="font-medium">{user.username}</span>
+                  </div>
+                  <Link href="/profile" onClick={() => setIsOpen(false)}>
+                    <button className="w-full flex items-center space-x-2 px-4 py-2 gaming-card border border-gaming-border rounded-lg font-medium hover:border-neon-green transition-colors">
+                      <User className="h-4 w-4" />
+                      <span>Profile</span>
+                    </button>
+                  </Link>
+                  <Link href="/settings" onClick={() => setIsOpen(false)}>
+                    <button className="w-full flex items-center space-x-2 px-4 py-2 gaming-card border border-gaming-border rounded-lg font-medium hover:border-neon-blue transition-colors">
+                      <Settings className="h-4 w-4" />
+                      <span>Settings</span>
+                    </button>
+                  </Link>
+                  <button
+                    onClick={() => {
+                      handleLogout()
+                      setIsOpen(false)
+                    }}
+                    className="w-full flex items-center space-x-2 px-4 py-2 bg-red-500/10 border border-red-500/20 text-red-500 rounded-lg font-medium transition-colors"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span>Logout</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link href="/login" onClick={() => setIsOpen(false)}>
+                    <button className="w-full flex items-center space-x-2 px-4 py-2 gaming-card border border-gaming-border rounded-lg font-medium hover:border-neon-blue transition-colors">
+                      <LogIn className="h-4 w-4" />
+                      <span>Sign In</span>
+                    </button>
+                  </Link>
+                  <Link href="/register" onClick={() => setIsOpen(false)}>
+                    <button className="w-full flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-neon-blue to-neon-purple rounded-lg text-white font-medium">
+                      <User className="h-4 w-4" />
+                      <span>Sign Up</span>
+                    </button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </motion.div>

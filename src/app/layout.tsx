@@ -2,7 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { ThemeProvider } from '@/components/theme-provider'
-import { Toaster } from '@/components/ui/toaster'
+import { Toaster } from 'sonner'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -35,7 +35,17 @@ export default function RootLayout({
           <div className="min-h-screen gaming-bg">
             {children}
           </div>
-          <Toaster />
+          <Toaster 
+            position="top-right" 
+            theme="dark"
+            toastOptions={{
+              style: {
+                background: '#1a1625',
+                border: '1px solid #2d2438',
+                color: '#e2e8f0',
+              },
+            }}
+          />
         </ThemeProvider>
       </body>
     </html>
