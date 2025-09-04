@@ -1040,8 +1040,7 @@ export default function ModDetailPage() {
                 {[
                   { id: 'description', label: 'Description', icon: FileText },
                   { id: 'reviews', label: `Reviews (${reviews.length})`, icon: MessageSquare },
-                  { id: 'requirements', label: 'Requirements', icon: Tag },
-                  { id: 'files', label: 'Files', icon: Download }
+                  { id: 'requirements', label: 'Requirements', icon: Tag }
                 ].map((tab) => {
                   const IconComponent = tab.icon
                   return (
@@ -1209,34 +1208,6 @@ export default function ModDetailPage() {
                       <h4 className="text-lg font-semibold mb-3">Category</h4>
                       <p className="text-muted-foreground">{mod.category}</p>
                     </div>
-                  </motion.div>
-                )}
-
-                {activeTab === 'files' && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="space-y-4"
-                  >
-                    {mod.files.map((file, index) => (
-                      <div key={index} className="gaming-card p-4 rounded-lg border border-gaming-border">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <h5 className="font-semibold">{file.name}</h5>
-                            <p className="text-sm text-muted-foreground">{file.size}</p>
-                          </div>
-                          <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={handleDownload}
-                            className="px-4 py-2 bg-neon-blue rounded-lg text-white font-semibold hover-glow transition-all duration-300"
-                          >
-                            Download
-                          </motion.button>
-                        </div>
-                      </div>
-                    ))}
                   </motion.div>
                 )}
               </div>
