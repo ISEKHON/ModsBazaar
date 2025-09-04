@@ -192,7 +192,246 @@ textarea::placeholder {
                0 0 30px currentColor;
 }
 
-/* Scrollbar styling */
+/* Mobile-first responsive design improvements */
+@media (max-width: 768px) {
+  /* Better mobile navigation spacing */
+  .gaming-card {
+    padding: 1rem;
+  }
+  
+  /* Improve button sizes for touch */
+  button, .button, a[role="button"] {
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+  }
+  
+  /* Better text sizes for mobile */
+  h1 { font-size: 2rem !important; }
+  h2 { font-size: 1.75rem !important; }
+  h3 { font-size: 1.5rem !important; }
+  
+  /* Reduce spacing on mobile */
+  .space-y-8 > * + * { margin-top: 1.5rem !important; }
+  .space-y-6 > * + * { margin-top: 1rem !important; }
+  .space-y-4 > * + * { margin-top: 0.75rem !important; }
+  
+  /* Mobile grid improvements */
+  .grid-cols-3 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .grid-cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  
+  /* Better hero section on mobile */
+  .hero-title {
+    font-size: 2.5rem !important;
+    line-height: 1.2 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small screens */
+  .gaming-card {
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+  }
+  
+  /* Smaller hero title for very small screens */
+  .hero-title {
+    font-size: 2rem !important;
+  }
+  
+  /* Stack everything vertically on very small screens */
+  .flex-row { flex-direction: column !important; }
+  
+  /* Reduce padding on very small screens */
+  .px-4 { padding-left: 1rem !important; padding-right: 1rem !important; }
+}
+
+/* Better text handling */
+.text-responsive {
+  font-size: clamp(0.875rem, 2.5vw, 1.125rem);
+  line-height: 1.6;
+}
+
+.title-responsive {
+  font-size: clamp(1.875rem, 5vw, 3rem);
+  line-height: 1.2;
+}
+
+/* Improved card layouts for mobile */
+@media (max-width: 768px) {
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .card-grid.grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  /* Better modal sizing on mobile */
+  .modal-content {
+    margin: 1rem;
+    max-width: calc(100vw - 2rem);
+    max-height: calc(100vh - 2rem);
+  }
+}
+
+/* Improved scrolling for mobile */
+@media (max-width: 768px) {
+  .overflow-x-auto {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .overflow-x-auto::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Utility classes for responsive design */
+.container-responsive {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-responsive {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-responsive {
+    padding: 0 2rem;
+  }
+}
+
+/* Responsive text utilities */
+.text-responsive-sm {
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+}
+
+.text-responsive-base {
+  font-size: clamp(0.875rem, 2.5vw, 1rem);
+}
+
+.text-responsive-lg {
+  font-size: clamp(1rem, 3vw, 1.125rem);
+}
+
+.text-responsive-xl {
+  font-size: clamp(1.125rem, 3.5vw, 1.25rem);
+}
+
+.text-responsive-2xl {
+  font-size: clamp(1.25rem, 4vw, 1.5rem);
+}
+
+.text-responsive-3xl {
+  font-size: clamp(1.5rem, 5vw, 1.875rem);
+}
+
+/* Better touch targets */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive spacing utilities */
+.space-responsive > * + * {
+  margin-top: clamp(0.5rem, 2vw, 1rem);
+}
+
+.gap-responsive {
+  gap: clamp(0.5rem, 2vw, 1rem);
+}
+
+/* Better mobile modals */
+@media (max-width: 768px) {
+  .modal-overlay {
+    padding: 1rem;
+  }
+  
+  .modal-content {
+    width: 100%;
+    max-width: none;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+  }
+}
+
+/* Improved form elements on mobile */
+@media (max-width: 768px) {
+  input, textarea, select {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 0.75rem 1rem;
+  }
+  
+  button {
+    font-size: 16px;
+    padding: 0.75rem 1.5rem;
+  }
+}
+
+/* Better card stacking on mobile */
+@media (max-width: 768px) {
+  .card-stack > * {
+    margin-bottom: 1rem;
+  }
+  
+  .card-stack > *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* Responsive image handling */
+.img-responsive {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.img-responsive-contain {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Better table responsiveness */
+@media (max-width: 768px) {
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .table-responsive table {
+    min-width: 600px;
+  }
+}
+
+/* Hide/show elements based on screen size */
+.mobile-only {
+  display: block;
+}
+
+.desktop-only {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none;
+  }
+  
+  .desktop-only {
+    display: block;
+  }
+}
 ::-webkit-scrollbar {
   width: 8px;
 }

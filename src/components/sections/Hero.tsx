@@ -47,7 +47,7 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-5xl md:text-7xl lg:text-8xl font-gaming font-bold"
+            className="hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-gaming font-bold"
           >
             <span className="bg-gradient-to-r from-neon-blue via-neon-purple to-neon-green bg-clip-text text-transparent animate-pulse">
               ModsBazaar
@@ -58,7 +58,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto"
+            className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto px-4"
           >
             The ultimate destination for <span className="text-neon-blue font-semibold">Farming Simulator 22/25</span> mods.
             Experience lightning-fast downloads, curated content, and a gaming-style interface.
@@ -68,13 +68,13 @@ export default function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center px-4"
           >
             <Link href="/mods">
               <motion.button
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
-                className="group flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-neon-blue to-neon-purple rounded-lg text-white font-semibold text-lg hover-glow transition-all duration-300"
+                className="group flex items-center justify-center space-x-2 px-6 sm:px-8 py-3 sm:py-4 w-full sm:w-auto bg-gradient-to-r from-neon-blue to-neon-purple rounded-lg text-white font-semibold text-base sm:text-lg hover-glow transition-all duration-300"
               >
                 <Download className="h-5 w-5 group-hover:animate-bounce" />
                 <span>Browse Mods</span>
@@ -86,7 +86,7 @@ export default function Hero() {
               <motion.button
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center space-x-2 px-8 py-4 gaming-card neon-border rounded-lg font-semibold text-lg hover-glow transition-all duration-300 text-white"
+                className="flex items-center justify-center space-x-2 px-6 sm:px-8 py-3 sm:py-4 w-full sm:w-auto gaming-card neon-border rounded-lg font-semibold text-base sm:text-lg hover-glow transition-all duration-300 text-white"
               >
                 <Zap className="h-5 w-5 text-neon-green" />
                 <span>Submit Your Mod</span>
@@ -98,7 +98,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16"
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mt-12 sm:mt-16 px-4"
           >
             <motion.div
               whileHover={{ y: -5 }}

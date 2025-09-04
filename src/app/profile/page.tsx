@@ -406,42 +406,42 @@ export default function ProfilePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="gaming-card p-8 rounded-xl mb-8"
+              className="gaming-card p-4 sm:p-6 lg:p-8 rounded-xl mb-8"
             >
-              <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6">
-                <div className="w-24 h-24 bg-gradient-to-r from-neon-blue to-neon-purple rounded-full flex items-center justify-center text-2xl font-bold text-white">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-gradient-to-r from-neon-blue to-neon-purple rounded-full flex items-center justify-center text-lg sm:text-xl lg:text-2xl font-bold text-white mx-auto sm:mx-0">
                   {currentUser?.username ? currentUser.username.substring(0, 2).toUpperCase() : 'U'}
                 </div>
                 
-                <div className="flex-1">
-                  <div className="flex items-center space-x-3 mb-2">
-                    <h1 className="text-3xl font-bold">{currentUser?.username || 'User'}</h1>
-                    <span className="px-3 py-1 bg-gradient-to-r from-neon-purple to-neon-pink rounded-full text-sm font-semibold text-white">
+                <div className="flex-1 text-center sm:text-left">
+                  <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 mb-2">
+                    <h1 className="text-2xl sm:text-3xl font-bold">{currentUser?.username || 'User'}</h1>
+                    <span className="px-3 py-1 bg-gradient-to-r from-neon-purple to-neon-pink rounded-full text-sm font-semibold text-white inline-block">
                       {currentUser?.role ? currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1) : 'User'}
                     </span>
                   </div>
                   
-                  <div className="flex items-center space-x-2 text-muted-foreground mb-4">
+                  <div className="flex items-center justify-center sm:justify-start space-x-2 text-muted-foreground mb-4">
                     <Mail className="h-4 w-4" />
-                    <span>{currentUser?.email || 'user@example.com'}</span>
+                    <span className="text-sm">{currentUser?.email || 'user@example.com'}</span>
                   </div>
                   
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-neon-blue">{userModStats.totalDownloads.toLocaleString()}</div>
-                      <div className="text-sm text-muted-foreground">Total Downloads</div>
+                      <div className="text-lg sm:text-2xl font-bold text-neon-blue">{userModStats.totalDownloads.toLocaleString()}</div>
+                      <div className="text-xs sm:text-sm text-muted-foreground">Total Downloads</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-neon-green">{userModStats.averageRating > 0 ? userModStats.averageRating.toFixed(1) : '0.0'}</div>
-                      <div className="text-sm text-muted-foreground">Avg Rating</div>
+                      <div className="text-lg sm:text-2xl font-bold text-neon-green">{userModStats.averageRating > 0 ? userModStats.averageRating.toFixed(1) : '0.0'}</div>
+                      <div className="text-xs sm:text-sm text-muted-foreground">Avg Rating</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-neon-purple">{userModStats.totalMods}</div>
-                      <div className="text-sm text-muted-foreground">Uploaded Mods</div>
+                      <div className="text-lg sm:text-2xl font-bold text-neon-purple">{userModStats.totalMods}</div>
+                      <div className="text-xs sm:text-sm text-muted-foreground">Uploaded Mods</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-neon-orange">{profileData?.joinedAt ? new Date(profileData.joinedAt).getFullYear() : new Date().getFullYear()}</div>
-                      <div className="text-sm text-muted-foreground">Member Since</div>
+                      <div className="text-lg sm:text-2xl font-bold text-neon-orange">{profileData?.joinedAt ? new Date(profileData.joinedAt).getFullYear() : new Date().getFullYear()}</div>
+                      <div className="text-xs sm:text-sm text-muted-foreground">Member Since</div>
                     </div>
                   </div>
                 </div>
@@ -449,7 +449,7 @@ export default function ProfilePage() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex items-center space-x-2 px-4 py-2 bg-gaming-border rounded-lg hover:bg-gaming-border/80 transition-colors"
+                  className="hidden sm:flex items-center space-x-2 px-4 py-2 bg-gaming-border rounded-lg hover:bg-gaming-border/80 transition-colors"
                 >
                   <Edit className="h-4 w-4" />
                   <span>Edit Profile</span>
@@ -458,12 +458,51 @@ export default function ProfilePage() {
             </motion.div>
 
             <div className="grid lg:grid-cols-4 gap-8">
-              {/* Sidebar Navigation */}
+              {/* Mobile Tab Navigation */}
+              <div className="lg:hidden mb-6">
+                <div className="gaming-card p-4 rounded-xl">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    {tabs.map((tab) => {
+                      const IconComponent = tab.icon
+                      return (
+                        <motion.button
+                          key={tab.id}
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={() => setActiveTab(tab.id)}
+                          className={`flex flex-col items-center space-y-2 p-3 rounded-lg transition-all duration-200 ${
+                            activeTab === tab.id
+                              ? 'bg-gradient-to-r from-neon-blue to-neon-purple text-white'
+                              : 'hover:bg-gaming-border text-muted-foreground hover:text-white'
+                          }`}
+                        >
+                          <IconComponent className="h-4 w-4 sm:h-5 sm:w-5" />
+                          <span className="text-xs text-center">{tab.label}</span>
+                        </motion.button>
+                      )
+                    })}
+                  </div>
+                  {/* Logout button for mobile */}
+                  <div className="mt-4 pt-4 border-t border-gaming-border">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={handleLogout}
+                      className="w-full flex items-center justify-center space-x-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/10 transition-all duration-200"
+                    >
+                      <LogOut className="h-5 w-5" />
+                      <span>Sign Out</span>
+                    </motion.button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Desktop Sidebar Navigation */}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="lg:col-span-1"
+                className="lg:col-span-1 hidden lg:block"
               >
                 <div className="gaming-card p-6 rounded-xl">
                   <nav className="space-y-2">
