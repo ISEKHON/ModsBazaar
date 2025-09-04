@@ -33,7 +33,7 @@ export default function Navbar() {
     { name: 'Home', href: '/' },
     { name: 'Mods', href: '/mods' },
     { name: 'Categories', href: '/categories' },
-    { name: 'Submit Mod', href: '/submit' },
+    { name: 'Submit Mod', href: '/submit-mod' },
     { name: 'About', href: '/about' },
   ]
 

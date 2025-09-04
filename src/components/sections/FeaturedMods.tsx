@@ -20,7 +20,9 @@ interface FeaturedMod {
   game: 'FS22' | 'FS25' | 'Both'
   category: string
   isPopular?: boolean
+  publishedAt: string
   author: {
+    name?: string
     id: {
       _id: string
       username: string
@@ -223,12 +225,18 @@ export default function FeaturedMods() {
                     <div className="flex items-center justify-between mb-4 text-xs text-muted-foreground">
                       <div className="flex items-center space-x-1">
                         <Calendar className="h-3 w-3" />
-                        <span>By {mod.author.id.username}</span>
+                        <span>{new Date(mod.publishedAt).toLocaleDateString()}</span>
                       </div>
                       <div className="flex items-center space-x-1">
                         <Eye className="h-3 w-3" />
                         <span>View Details</span>
                       </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <p className="text-sm text-neon-blue font-medium">
+                        by {mod.author?.name || mod.author?.id?.username || 'Unknown Author'}
+                      </p>
                     </div>
 
                     <motion.button

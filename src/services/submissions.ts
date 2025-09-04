@@ -35,6 +35,7 @@ export interface ModSubmission {
     _id: string;
     slug: string;
     name: string;
+    isActive?: boolean;
   };
   submittedAt: string;
   reviewedAt?: string;

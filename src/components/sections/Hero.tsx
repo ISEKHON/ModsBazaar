@@ -82,7 +82,7 @@ export default function Hero() {
               </motion.button>
             </Link>
 
-            <Link href="/submit">
+            <Link href="/submit-mod">
               <motion.button
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}

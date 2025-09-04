@@ -25,7 +25,7 @@ export default function Footer() {
     'Quick Links': [
       { name: 'Browse Mods', href: '/mods' },
       { name: 'Categories', href: '/categories' },
-      { name: 'Submit Mod', href: '/submit' },
+      { name: 'Submit Mod', href: '/submit-mod' },
       { name: 'About Us', href: '/about' },
     ],
     'Community': [

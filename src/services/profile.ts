@@ -1,4 +1,6 @@
 import api from '../lib/api';
+import { apiGet } from '../lib/api';
+import { authService } from './auth';
 
 export interface UserProfile {
   _id: string;
@@ -132,17 +134,42 @@ export const profileAPI = {
     name: string;
     thumbnail?: string;
     downloadedAt: string;
-    type: 'free' | 'purchased' | 'unlock';
-    downloadCount: number;
+    type: 'free' | 'paid' | 'unlock';
+    downloadCount?: number;
+    game?: string;
+    category?: string;
+    slug?: string;
   }>> {
-    const profile = await this.getProfile();
-    return profile.downloadHistory.map(item => ({
-      _id: item.modId,
-      name: item.modName,
-      downloadedAt: item.downloadedAt,
-      type: item.type,
-      downloadCount: item.downloadCount
-    }));
+    try {
+      // Check if user is authenticated first
+      const token = authService.getToken();
+      if (!token) {
+        return [];
+      }
+
+      const response = await apiGet<any>('/user/downloads?limit=50');
+      
+      // Handle response structure
+      let items = [];
+      if (response.status === 'success' && response.data?.downloads) {
+        items = response.data.downloads;
+      }
+
+      return items.map((item: any) => ({
+        _id: item.modId,
+        name: item.name,
+        thumbnail: item.thumbnail,
+        downloadedAt: item.downloadedAt,
+        type: item.type,
+        downloadCount: 1,
+        game: item.game,
+        category: item.category,
+        slug: item.slug
+      }));
+    } catch (error) {
+      console.error('Error fetching download history:', error);
+      return [];
+    }
   },
 
   // Get user statistics
@@ -155,15 +182,91 @@ export const profileAPI = {
     lastActive: string;
   }> {
     const profile = await this.getProfile();
+    const downloadHistory = await this.getDownloadHistory();
     
     return {
       totalMods: (profile.purchasedMods?.length || 0) + (profile.unlockedMods?.length || 0),
-      totalDownloads: profile.downloadHistory?.length || 0,
+      totalDownloads: downloadHistory.length,
       totalSpent: profile.totalSpent || 0,
       favoritesCount: profile.favoriteMods?.length || 0,
       joinDate: profile.joinedAt,
       lastActive: profile.lastActive
     };
+  },
+
+  // Get user's uploaded mods statistics
+  async getUserModStats(): Promise<{
+    totalDownloads: number;
+    averageRating: number;
+    totalMods: number;
+  }> {
+    try {
+      if (!authService.getToken()) {
+        return { totalDownloads: 0, averageRating: 0, totalMods: 0 };
+      }
+
+      const response = await apiGet<any>('/user/mods/stats');
+      if (response.status === 'success' && response.data) {
+        return {
+          totalDownloads: response.data.totalDownloads || 0,
+          averageRating: response.data.averageRating || 0,
+          totalMods: response.data.totalMods || 0
+        };
+      }
+      return { totalDownloads: 0, averageRating: 0, totalMods: 0 };
+    } catch (error) {
+      console.error('Error fetching user mod stats:', error);
+      return { totalDownloads: 0, averageRating: 0, totalMods: 0 };
+    }
+  },
+
+  // Delete a mod (admin or owner only)
+  async deleteMod(modId: string): Promise<void> {
+    try {
+      const response = await api.delete(`/mods/${modId}`);
+      if (response.data.status !== 'success') {
+        throw new Error(response.data.message || 'Failed to delete mod');
+      }
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || 'Failed to delete mod');
+    }
+  },
+
+  // Unpublish a mod (admin or owner only)
+  async unpublishMod(modId: string): Promise<void> {
+    try {
+      const response = await api.patch(`/mods/${modId}/unpublish`);
+      if (response.data.status !== 'success') {
+        throw new Error(response.data.message || 'Failed to unpublish mod');
+      }
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || 'Failed to unpublish mod');
+    }
+  },
+
+  // Republish a mod (admin or owner only)
+  async republishMod(modId: string): Promise<void> {
+    try {
+      const response = await api.patch(`/mods/${modId}/republish`);
+      if (response.data.status !== 'success') {
+        throw new Error(response.data.message || 'Failed to republish mod');
+      }
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || 'Failed to republish mod');
+    }
+  },
+
+  // Edit/Update a mod (admin or owner only)
+  async editMod(modId: string, updates: any): Promise<void> {
+    try {
+      const response = await api.patch(`/mods/${modId}`, updates);
+      if (response.data.status !== 'success') {
+        throw new Error(response.data.message || 'Failed to update mod');
+      }
+      return response.data.data.mod;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || 'Failed to update mod');
+    }
   }
 };
 

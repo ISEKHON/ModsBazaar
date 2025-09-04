@@ -21,6 +21,7 @@ interface PopularMod {
   category: string
   isPopular?: boolean
   author: {
+    name?: string
     id: {
       _id: string
       username: string
@@ -170,8 +171,11 @@ export default function PopularMods() {
                       <h3 className="text-xl font-bold mb-2 group-hover:text-orange-500 transition-colors line-clamp-1">
                         {mod.name}
                       </h3>
-                      <p className="text-muted-foreground mb-4 text-sm line-clamp-2">
+                      <p className="text-muted-foreground mb-3 text-sm line-clamp-2">
                         {mod.shortDescription}
+                      </p>
+                      <p className="text-sm text-orange-500 font-medium mb-4">
+                        by {mod.author?.name || mod.author?.id?.username || 'Unknown Author'}
                       </p>
 
                       <div className="flex items-center justify-between mb-4">

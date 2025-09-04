@@ -338,8 +338,8 @@ export default function ModsPage() {
                         <p className="text-muted-foreground mb-3 text-sm line-clamp-2">
                           {mod.shortDescription}
                         </p>
-                        <p className="text-xs text-muted-foreground mb-4">
-                          by {mod.author.name}
+                        <p className="text-sm text-neon-blue font-medium mb-4">
+                          by {mod.author?.name || 'Unknown Author'}
                         </p>
 
                         <div className="flex items-center justify-between mb-4">

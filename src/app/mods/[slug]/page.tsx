@@ -3,9 +3,10 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Download, Star, Heart, Share2, Flag, Play, Unlock, Shield, MessageSquare, FileText, Tag, Calendar, Copy, ExternalLink, User, ThumbsUp, ThumbsDown, Edit3 } from 'lucide-react'
+import { ArrowLeft, Download, Star, Heart, Share2, Flag, Play, Unlock, Shield, MessageSquare, FileText, Tag, Calendar, Copy, ExternalLink, User, ThumbsUp, ThumbsDown, Edit3, Edit, Trash2, Settings, X } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
+import { useAuth } from '@/hooks/useAuth'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import api from '@/lib/api'
@@ -46,6 +47,7 @@ interface ModData {
   publishedAt: string
   updatedAt: string
   canDownload?: boolean
+  isActive?: boolean
 }
 
 // Helper function to extract YouTube video ID from URL
@@ -68,6 +70,7 @@ const getYouTubeVideoId = (url: string): string | null => {
 export default function ModDetailPage() {
   const params = useParams()
   const slug = params.slug as string
+  const { user, isAuthenticated } = useAuth()
   
   const [mod, setMod] = useState<ModData | null>(null)
   const [loading, setLoading] = useState(true)
@@ -88,12 +91,37 @@ export default function ModDetailPage() {
   const [hoveredRating, setHoveredRating] = useState(0)
   const [reviewText, setReviewText] = useState('')
   const [submittingReview, setSubmittingReview] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showUnpublishModal, setShowUnpublishModal] = useState(false)
   const [reviews, setReviews] = useState<any[]>([])
   const [userReview, setUserReview] = useState<any>(null)
   const [reviewsLoading, setReviewsLoading] = useState(false)
+  const [editForm, setEditForm] = useState({
+    name: '',
+    description: '',
+    shortDescription: '',
+    version: '',
+    game: 'FS22' as 'FS22' | 'FS25' | 'Both',
+    category: '',
+    tags: [] as string[],
+    type: 'free' as 'free' | 'paid' | 'unlock',
+    price: 0,
+    unlockCode: ''
+  })
+  const [isSubmittingEdit, setIsSubmittingEdit] = useState(false)
 
   // Check if user is logged in
   const isLoggedIn = typeof window !== 'undefined' && localStorage.getItem('auth_token')
+
+  // Check if user can edit this mod (owner or admin)
+  const canEditMod = isAuthenticated && mod && (
+    (user?.role === 'admin') || 
+    (mod.author.id?._id === user?._id)
+  )
+
+  // Check if user is admin
+  const isAdmin = isAuthenticated && user?.role === 'admin'
 
   const loadReviews = useCallback(async (slug: string) => {
     try {
@@ -461,6 +489,32 @@ export default function ModDetailPage() {
     }
   }
 
+  // Handle mod deletion
+  const handleDeleteMod = async () => {
+    try {
+      const response = await api.delete(`/mods/${mod?._id}`)
+      if (response.data.status === 'success') {
+        toast.success('Mod deleted successfully')
+        window.location.href = '/mods' // Redirect to mods page
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to delete mod')
+    }
+  }
+
+  // Handle mod unpublishing (admin only)
+  const handleUnpublishMod = async () => {
+    try {
+      const response = await api.patch(`/mods/${mod?._id}/unpublish`)
+      if (response.data.status === 'success') {
+        toast.success('Mod unpublished successfully')
+        setMod({ ...mod!, isActive: false })
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to unpublish mod')
+    }
+  }
+
   const formatTimeAgo = (dateString: string) => {
     const date = new Date(dateString)
     const now = new Date()
@@ -471,6 +525,51 @@ export default function ModDetailPage() {
     if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`
     if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)}d ago`
     return date.toLocaleDateString()
+  }
+
+  // Edit mod functionality
+  const handleEditMod = () => {
+    if (!mod) return;
+    
+    // Pre-populate the edit form with current mod data
+    setEditForm({
+      name: mod.name,
+      description: mod.description,
+      shortDescription: mod.shortDescription,
+      version: mod.version,
+      game: mod.game,
+      category: mod.category,
+      tags: mod.tags || [],
+      type: mod.type,
+      price: mod.price || 0,
+      unlockCode: mod.unlockCode || ''
+    });
+    
+    setShowEditModal(true);
+  }
+
+  const handleSubmitEdit = async () => {
+    if (!mod) return;
+
+    try {
+      setIsSubmittingEdit(true);
+      
+      const response = await api.patch(`/mods/${mod._id}`, editForm);
+      
+      if (response.data.status === 'success') {
+        toast.success('Mod updated successfully');
+        setShowEditModal(false);
+        
+        // Refresh mod data
+        window.location.reload(); // Simple refresh for now
+      }
+      
+    } catch (error: any) {
+      console.error('Error updating mod:', error);
+      toast.error(error.response?.data?.message || 'Failed to update mod');
+    } finally {
+      setIsSubmittingEdit(false);
+    }
   }
 
   if (loading) {
@@ -675,11 +774,11 @@ export default function ModDetailPage() {
                     <div className="flex items-center space-x-3">
                       <div className="w-12 h-12 bg-gradient-to-r from-neon-purple to-neon-blue rounded-full flex items-center justify-center">
                         <span className="text-white font-bold">
-                          {mod.author.name.substring(0, 2).toUpperCase()}
+                          {(mod.author.name || mod.author.id?.username || 'Unknown').substring(0, 2).toUpperCase()}
                         </span>
                       </div>
                       <div>
-                        <p className="font-semibold">{mod.author.name}</p>
+                        <p className="font-semibold">{mod.author.name || mod.author.id?.username || 'Unknown Author'}</p>
                         <p className="text-sm text-muted-foreground">Mod Creator</p>
                       </div>
                     </div>
@@ -701,6 +800,43 @@ export default function ModDetailPage() {
                       )}
                     </div>
                   </div>
+
+                  {/* Edit/Admin Controls */}
+                  {canEditMod && (
+                    <div className="flex items-center justify-center space-x-3 mb-6 p-4 bg-gaming-border/20 rounded-lg border border-gaming-border">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={handleEditMod}
+                        className="flex items-center space-x-2 px-4 py-2 bg-neon-blue/20 border border-neon-blue/30 rounded-lg text-neon-blue hover:bg-neon-blue/30 transition-colors"
+                      >
+                        <Edit className="h-4 w-4" />
+                        <span>Edit Mod</span>
+                      </motion.button>
+                      
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setShowDeleteModal(true)}
+                        className="flex items-center space-x-2 px-4 py-2 bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 hover:bg-red-500/30 transition-colors"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        <span>Delete Mod</span>
+                      </motion.button>
+                      
+                      {isAdmin && (
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => setShowUnpublishModal(true)}
+                          className="flex items-center space-x-2 px-4 py-2 bg-orange-500/20 border border-orange-500/30 rounded-lg text-orange-400 hover:bg-orange-500/30 transition-colors"
+                        >
+                          <Settings className="h-4 w-4" />
+                          <span>Unpublish</span>
+                        </motion.button>
+                      )}
+                    </div>
+                  )}
 
                   <div className="grid grid-cols-2 gap-4 mb-6">
                     <div className="text-center">
@@ -1458,6 +1594,279 @@ export default function ModDetailPage() {
               >
                 Close
               </motion.button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="bg-gaming-card border border-gaming-border rounded-lg max-w-md w-full p-6"
+          >
+            <div className="text-center">
+              <Trash2 className="h-12 w-12 text-red-400 mx-auto mb-4" />
+              <h3 className="text-xl font-bold mb-2">Delete Mod</h3>
+              <p className="text-muted-foreground mb-6">
+                Are you sure you want to delete "{mod?.name}"? This action cannot be undone and will permanently remove the mod from the platform.
+              </p>
+              <div className="flex space-x-3">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowDeleteModal(false)}
+                  className="flex-1 px-4 py-2 bg-gaming-border rounded-lg hover:bg-gaming-border/80 transition-colors"
+                >
+                  Cancel
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    handleDeleteMod();
+                    setShowDeleteModal(false);
+                  }}
+                  className="flex-1 px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-white transition-colors"
+                >
+                  Delete
+                </motion.button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Unpublish Confirmation Modal */}
+      {showUnpublishModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="bg-gaming-card border border-gaming-border rounded-lg max-w-md w-full p-6"
+          >
+            <div className="text-center">
+              <Settings className="h-12 w-12 text-orange-400 mx-auto mb-4" />
+              <h3 className="text-xl font-bold mb-2">Unpublish Mod</h3>
+              <p className="text-muted-foreground mb-6">
+                Are you sure you want to unpublish "{mod?.name}"? This will hide the mod from public view but preserve the data.
+              </p>
+              <div className="flex space-x-3">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowUnpublishModal(false)}
+                  className="flex-1 px-4 py-2 bg-gaming-border rounded-lg hover:bg-gaming-border/80 transition-colors"
+                >
+                  Cancel
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    handleUnpublishMod();
+                    setShowUnpublishModal(false);
+                  }}
+                  className="flex-1 px-4 py-2 bg-orange-500 hover:bg-orange-600 rounded-lg text-white transition-colors"
+                >
+                  Unpublish
+                </motion.button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Edit Mod Modal */}
+      {showEditModal && mod && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="bg-gaming-card border border-gaming-border rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+          >
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold">Edit Mod</h3>
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setShowEditModal(false)}
+                  className="p-2 hover:bg-gaming-border rounded-lg transition-colors"
+                >
+                  <X className="h-5 w-5" />
+                </motion.button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Basic Information */}
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-neon-blue">Basic Information</h4>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Mod Name</label>
+                    <input
+                      type="text"
+                      value={editForm.name}
+                      onChange={(e) => setEditForm({...editForm, name: e.target.value})}
+                      className="w-full px-3 py-2 bg-gaming-border border border-gaming-border rounded-lg focus:outline-none focus:border-neon-blue transition-colors"
+                      placeholder="Enter mod name"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Short Description</label>
+                    <input
+                      type="text"
+                      value={editForm.shortDescription}
+                      onChange={(e) => setEditForm({...editForm, shortDescription: e.target.value})}
+                      className="w-full px-3 py-2 bg-gaming-border border border-gaming-border rounded-lg focus:outline-none focus:border-neon-blue transition-colors"
+                      placeholder="Brief description"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Version</label>
+                    <input
+                      type="text"
+                      value={editForm.version}
+                      onChange={(e) => setEditForm({...editForm, version: e.target.value})}
+                      className="w-full px-3 py-2 bg-gaming-border border border-gaming-border rounded-lg focus:outline-none focus:border-neon-blue transition-colors"
+                      placeholder="e.g., 1.0.0"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Game</label>
+                    <select
+                      value={editForm.game}
+                      onChange={(e) => setEditForm({...editForm, game: e.target.value as 'FS22' | 'FS25' | 'Both'})}
+                      className="w-full px-3 py-2 bg-gaming-border border border-gaming-border rounded-lg focus:outline-none focus:border-neon-blue transition-colors"
+                    >
+                      <option value="FS22">Farming Simulator 22</option>
+                      <option value="FS25">Farming Simulator 25</option>
+                      <option value="Both">Both Games</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Category</label>
+                    <select
+                      value={editForm.category}
+                      onChange={(e) => setEditForm({...editForm, category: e.target.value})}
+                      className="w-full px-3 py-2 bg-gaming-border border border-gaming-border rounded-lg focus:outline-none focus:border-neon-blue transition-colors"
+                    >
+                      <option value="">Select Category</option>
+                      <option value="Vehicles">Vehicles</option>
+                      <option value="Implements">Implements</option>
+                      <option value="Maps">Maps</option>
+                      <option value="Buildings">Buildings</option>
+                      <option value="Animals">Animals</option>
+                      <option value="Scripts">Scripts</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Additional Information */}
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-neon-blue">Additional Information</h4>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Type</label>
+                    <select
+                      value={editForm.type}
+                      onChange={(e) => setEditForm({...editForm, type: e.target.value as 'free' | 'paid' | 'unlock'})}
+                      className="w-full px-3 py-2 bg-gaming-border border border-gaming-border rounded-lg focus:outline-none focus:border-neon-blue transition-colors"
+                    >
+                      <option value="free">Free</option>
+                      <option value="paid">Paid</option>
+                      <option value="unlock">Unlock Code</option>
+                    </select>
+                  </div>
+
+                  {editForm.type === 'paid' && (
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Price ($)</label>
+                      <input
+                        type="number"
+                        value={editForm.price}
+                        onChange={(e) => setEditForm({...editForm, price: parseFloat(e.target.value) || 0})}
+                        className="w-full px-3 py-2 bg-gaming-border border border-gaming-border rounded-lg focus:outline-none focus:border-neon-blue transition-colors"
+                        placeholder="0.00"
+                        min="0"
+                        step="0.01"
+                      />
+                    </div>
+                  )}
+
+                  {editForm.type === 'unlock' && (
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Unlock Code</label>
+                      <input
+                        type="text"
+                        value={editForm.unlockCode}
+                        onChange={(e) => setEditForm({...editForm, unlockCode: e.target.value})}
+                        className="w-full px-3 py-2 bg-gaming-border border border-gaming-border rounded-lg focus:outline-none focus:border-neon-blue transition-colors"
+                        placeholder="Enter unlock code"
+                      />
+                    </div>
+                  )}
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Tags (comma separated)</label>
+                    <input
+                      type="text"
+                      value={editForm.tags.join(', ')}
+                      onChange={(e) => setEditForm({
+                        ...editForm, 
+                        tags: e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag)
+                      })}
+                      className="w-full px-3 py-2 bg-gaming-border border border-gaming-border rounded-lg focus:outline-none focus:border-neon-blue transition-colors"
+                      placeholder="e.g., tractor, farming, vehicle"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium mb-2">Full Description</label>
+                <textarea
+                  value={editForm.description}
+                  onChange={(e) => setEditForm({...editForm, description: e.target.value})}
+                  className="w-full px-3 py-2 bg-gaming-border border border-gaming-border rounded-lg focus:outline-none focus:border-neon-blue transition-colors"
+                  rows={6}
+                  placeholder="Detailed description of your mod..."
+                />
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex justify-end space-x-3 mt-6">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowEditModal(false)}
+                  className="px-6 py-2 bg-gaming-border hover:bg-gaming-border/80 rounded-lg transition-colors"
+                  disabled={isSubmittingEdit}
+                >
+                  Cancel
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleSubmitEdit}
+                  className="px-6 py-2 bg-gradient-to-r from-neon-blue to-neon-purple hover:from-neon-blue/80 hover:to-neon-purple/80 rounded-lg text-white font-medium transition-all duration-300"
+                  disabled={isSubmittingEdit}
+                >
+                  {isSubmittingEdit ? 'Saving...' : 'Save Changes'}
+                </motion.button>
+              </div>
             </div>
           </motion.div>
         </div>
