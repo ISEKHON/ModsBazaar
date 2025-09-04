@@ -38,30 +38,6 @@ const nextConfig = {
     formats: ['image/webp', 'image/avif'],
   },
 
-  // Experimental features for Next.js 15
-  experimental: {
-    // Enable Turbopack for faster builds (development only)
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
-  },
-
-  // Webpack configuration (fallback for production builds)
-  webpack: (config, { dev, isServer }) => {
-    // Handle SVG files
-    config.module.rules.push({
-      test: /\.svg$/,
-      use: ['@svgr/webpack'],
-    });
-
-    return config;
-  },
-
   // Environment variables
   env: {
     CUSTOM_KEY: 'ModsBazaar',

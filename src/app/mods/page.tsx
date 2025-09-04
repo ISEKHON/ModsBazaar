@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { motion } from 'framer-motion'
 import { Star, Download, Eye, Calendar, Search, Filter, Play } from 'lucide-react'
 import Link from 'next/link'
@@ -46,6 +46,27 @@ interface ModsResponse {
 }
 
 export default function ModsPage() {
+  return (
+    <div className="min-h-screen">
+      <Navbar />
+      <Suspense fallback={
+        <main className="pt-16">
+          <div className="flex items-center justify-center min-h-[60vh]">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neon-blue mx-auto mb-4"></div>
+              <p className="text-muted-foreground">Loading mods...</p>
+            </div>
+          </div>
+        </main>
+      }>
+        <ModsContent />
+      </Suspense>
+      <Footer />
+    </div>
+  )
+}
+
+function ModsContent() {
   const searchParams = useSearchParams()
   const [mods, setMods] = useState<Mod[]>([])
   const [loading, setLoading] = useState(true)
@@ -459,8 +480,6 @@ export default function ModsPage() {
           </div>
         </section>
       </main>
-
-      <Footer />
     </div>
   )
 }
