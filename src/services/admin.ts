@@ -134,6 +134,14 @@ class AdminService {
     return await apiPost<{ message: string }>(`/admin/mods/${modId}/unfeature`);
   }
 
+  async markModPopular(modId: string): Promise<ApiResponse<{ message: string }>> {
+    return await apiPost<{ message: string }>(`/admin/mods/${modId}/popular`);
+  }
+
+  async unmarkModPopular(modId: string): Promise<ApiResponse<{ message: string }>> {
+    return await apiPost<{ message: string }>(`/admin/mods/${modId}/unpopular`);
+  }
+
   // Content Moderation
   async getReports(page: number = 1, limit: number = 20, filters?: {
     type?: string;

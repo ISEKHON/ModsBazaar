@@ -94,6 +94,7 @@ export interface Mod {
   };
   isActive: boolean;
   isFeatured: boolean;
+  isPopular: boolean;
   publishedAt?: Date;
   createdAt: Date;
   updatedAt: Date;

@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import Navbar from '@/components/layout/Navbar'
 import Hero from '@/components/sections/Hero'
 import FeaturedMods from '@/components/sections/FeaturedMods'
+import PopularMods from '@/components/sections/PopularMods'
 import Categories from '@/components/sections/Categories'
 import Footer from '@/components/layout/Footer'
 import LoadingScreen from '@/components/ui/LoadingScreen'
@@ -36,6 +37,7 @@ export default function HomePage() {
       <main>
         <Hero />
         <FeaturedMods />
+        <PopularMods />
         <Categories />
       </main>
       <Footer />

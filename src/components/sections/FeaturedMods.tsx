@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Star, Download, Eye, Calendar, Play } from 'lucide-react'
+import { Star, Download, Eye, Calendar, Play, Award, Flame } from 'lucide-react'
 import Link from 'next/link'
 import api from '@/lib/api'
 import { toast } from 'sonner'
@@ -19,6 +19,7 @@ interface FeaturedMod {
   rating: number
   game: 'FS22' | 'FS25' | 'Both'
   category: string
+  isPopular?: boolean
   author: {
     id: {
       _id: string
@@ -175,11 +176,19 @@ export default function FeaturedMods() {
                       </div>
                     )}
 
-                    {/* Featured Badge */}
+                    {/* Dynamic Badge - Featured or Popular */}
                     <div className="absolute bottom-2 left-2">
-                      <span className="px-2 py-1 bg-gradient-to-r from-neon-blue to-neon-purple rounded-full text-xs font-bold text-white">
-                        FEATURED
-                      </span>
+                      {mod.isPopular ? (
+                        <span className="px-2 py-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full text-xs font-bold text-white flex items-center gap-1">
+                          <Flame className="h-3 w-3" />
+                          POPULAR
+                        </span>
+                      ) : (
+                        <span className="px-2 py-1 bg-gradient-to-r from-neon-blue to-neon-purple rounded-full text-xs font-bold text-white flex items-center gap-1">
+                          <Award className="h-3 w-3" />
+                          FEATURED
+                        </span>
+                      )}
                     </div>
                   </div>
 

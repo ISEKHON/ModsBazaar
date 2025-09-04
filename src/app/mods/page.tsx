@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Star, Download, Eye, Calendar, Search, Filter, Play } from 'lucide-react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import api from '@/lib/api'
@@ -45,13 +46,17 @@ interface ModsResponse {
 }
 
 export default function ModsPage() {
+  const searchParams = useSearchParams()
   const [mods, setMods] = useState<Mod[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
   const [selectedGame, setSelectedGame] = useState('')
   const [selectedType, setSelectedType] = useState('')
-  const [sortBy, setSortBy] = useState('newest')
+  const [sortBy, setSortBy] = useState(() => {
+    // Initialize sort from URL params
+    return searchParams.get('sort') || 'newest'
+  })
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
@@ -134,6 +139,14 @@ export default function ModsPage() {
 
     fetchData()
   }, [searchQuery, selectedCategory, selectedGame, selectedType, sortBy])
+
+  // Handle URL parameters on component mount
+  useEffect(() => {
+    const sort = searchParams.get('sort')
+    if (sort && sort !== sortBy) {
+      setSortBy(sort)
+    }
+  }, [searchParams, sortBy])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
