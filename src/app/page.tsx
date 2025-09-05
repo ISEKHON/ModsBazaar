@@ -34,7 +34,7 @@ export default function HomePage() {
       className="min-h-screen"
     >
       <Navbar />
-      <main>
+      <main className="pt-16">
         <Hero />
         <FeaturedMods />
         <PopularMods />
