@@ -528,3 +528,1139 @@ textarea::placeholder {
   0% { transform: translate(0, 0); }
   100% { transform: translate(24px, 0); }
 }
+
+/* Mobile Profile Page Styles */
+.profile-mobile-container {
+  min-height: 100vh;
+}
+
+.profile-container-mobile {
+  padding: 0 1rem;
+}
+
+.profile-card-mobile {
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.profile-header-mobile {
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-header-desktop {
+  text-align: left;
+  flex-direction: row;
+  align-items: center;
+}
+
+.profile-stats-mobile {
+  gap: 0.75rem;
+}
+
+.profile-nav-mobile {
+  background: var(--gaming-card);
+  border: 1px solid var(--gaming-border);
+}
+
+.tab-button-mobile {
+  min-height: 60px;
+  font-size: 0.75rem;
+  padding: 0.75rem 0.5rem;
+}
+
+.tab-label-mobile {
+  font-size: 0.7rem;
+  line-height: 1.2;
+}
+
+.profile-content-mobile {
+  padding: 0;
+}
+
+.profile-tab-content {
+  padding: 0;
+}
+
+/* Purchased Mods Mobile Styles */
+.purchased-card-mobile {
+  background: var(--gaming-darker);
+  border: 1px solid var(--gaming-border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.purchased-header-mobile {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.purchased-thumbnail-mobile {
+  width: 3rem;
+  height: 3rem;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  border: 1px solid var(--gaming-border);
+  flex-shrink: 0;
+}
+
+.purchased-info-mobile {
+  flex: 1;
+  min-width: 0;
+}
+
+.purchased-title-mobile {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 0.25rem;
+  word-break: break-word;
+}
+
+.purchased-meta-mobile {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 0.25rem;
+}
+
+.purchased-price-mobile {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #10b981;
+  text-align: right;
+  margin-bottom: 0.5rem;
+}
+
+.purchased-description-mobile {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.purchased-actions-mobile {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.purchased-button-mobile {
+  flex: 1;
+  min-width: 120px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  transition: all 0.2s;
+}
+
+/* Download History Mobile Styles */
+.download-card-mobile {
+  background: var(--gaming-darker);
+  border: 1px solid var(--gaming-border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.download-header-mobile {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+  gap: 0.5rem;
+}
+
+.download-title-mobile {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  flex: 1;
+  word-break: break-word;
+}
+
+.download-date-mobile {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  flex-shrink: 0;
+}
+
+.download-meta-mobile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
+.download-button-mobile {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+/* Submissions Mobile Styles */
+.submission-card-mobile {
+  background: var(--gaming-darker);
+  border: 1px solid var(--gaming-border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.submission-title-mobile {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+  word-break: break-word;
+}
+
+.submission-meta-mobile {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 0.25rem;
+}
+
+.submission-url-mobile {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.submission-actions-mobile {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
+.submission-button-mobile {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .profile-card-mobile {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .purchased-header-mobile {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  
+  .purchased-thumbnail-mobile {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+  
+  .purchased-actions-mobile {
+    gap: 0.5rem;
+  }
+  
+  .purchased-button-mobile {
+    min-width: 100px;
+    padding: 0.625rem 1rem;
+    font-size: 0.8125rem;
+  }
+  
+  .submission-actions-mobile {
+    gap: 0.5rem;
+  }
+  
+  .submission-button-mobile {
+    flex: 1;
+    min-width: 80px;
+  }
+}
+
+@media (max-width: 640px) {
+  .profile-container-mobile {
+    padding: 0 0.75rem;
+  }
+  
+  .profile-card-mobile {
+    padding: 0.75rem;
+  }
+  
+  .purchased-header-mobile {
+    gap: 0.5rem;
+  }
+  
+  .purchased-actions-mobile {
+    flex-direction: column;
+  }
+  
+  .purchased-button-mobile {
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .download-header-mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  
+  .download-meta-mobile {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  
+  .download-button-mobile {
+    width: 100%;
+  }
+  
+  .submission-actions-mobile {
+    flex-direction: column;
+  }
+  
+  .submission-button-mobile {
+    width: 100%;
+  }
+}
+
+/* Mod Details Page Mobile Styles */
+.mod-details-mobile-container {
+  min-height: 100vh;
+}
+
+.mod-back-button-mobile {
+  padding: 0.5rem 0;
+  margin-bottom: 1rem;
+}
+
+.mod-header-mobile {
+  padding: 1rem 0;
+}
+
+.mod-media-gallery-mobile {
+  margin-bottom: 2rem;
+}
+
+.mod-media-container-mobile {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  background: var(--gaming-card);
+  border: 1px solid var(--gaming-border);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.mod-media-display-mobile {
+  height: 280px;
+  width: 100%;
+  position: relative;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: var(--gaming-card);
+}
+
+.mod-media-display-mobile iframe,
+.mod-media-display-mobile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.75rem;
+}
+
+.mod-thumbnails-mobile {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding: 1rem 0;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
+}
+
+.mod-thumbnails-mobile::-webkit-scrollbar {
+  height: 4px;
+}
+
+.mod-thumbnails-mobile::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mod-thumbnails-mobile::-webkit-scrollbar-thumb {
+  background: rgba(0, 212, 255, 0.3);
+  border-radius: 2px;
+}
+
+.mod-thumbnails-mobile::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 212, 255, 0.5);
+}
+
+.mod-thumbnail-mobile {
+  flex-shrink: 0;
+  width: 5rem;
+  height: 5rem;
+  min-width: 5rem;
+  min-height: 5rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 2px solid transparent;
+  scroll-snap-align: start;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--gaming-darker);
+  display: block;
+}
+
+.mod-thumbnail-mobile.active {
+  border-color: #00d4ff;
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+  transform: scale(1.08);
+}
+
+.mod-thumbnail-mobile:hover {
+  transform: scale(1.05);
+  border-color: rgba(0, 212, 255, 0.5);
+}
+
+.mod-thumbnail-mobile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  background: var(--gaming-darker);
+  display: block;
+  border-radius: 0.5rem;
+}
+
+/* Ensure proper image loading */
+.mod-thumbnail-mobile img[src=""],
+.mod-thumbnail-mobile img:not([src]) {
+  background: var(--gaming-darker);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mod-thumbnail-mobile img[src=""]:after,
+.mod-thumbnail-mobile img:not([src]):after {
+  content: "📷";
+  font-size: 1.5rem;
+  color: #666;
+}
+
+.mod-info-mobile {
+  padding: 0;
+}
+
+.mod-title-mobile {
+  font-size: 1.75rem;
+  line-height: 1.3;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.mod-description-mobile {
+  font-size: 1rem;
+  line-height: 1.5;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.mod-author-card-mobile {
+  background: var(--gaming-card);
+  border: 1px solid var(--gaming-border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.mod-author-header-mobile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.mod-author-info-mobile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mod-author-avatar-mobile {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(45deg, #8b5cf6, #00d4ff);
+  color: white;
+  font-weight: bold;
+  font-size: 0.875rem;
+}
+
+.mod-rating-mobile {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.mod-stats-mobile {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.mod-stat-mobile {
+  background: var(--gaming-darker);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}
+
+.mod-stat-value-mobile {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.mod-stat-label-mobile {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.mod-details-grid-mobile {
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.mod-detail-row-mobile {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--gaming-border);
+}
+
+.mod-detail-row-mobile:last-child {
+  border-bottom: none;
+}
+
+.mod-type-info-mobile {
+  background: var(--gaming-card);
+  border: 2px solid;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.mod-type-paid-mobile {
+  border-color: rgba(251, 146, 60, 0.5);
+  background: linear-gradient(to bottom right, rgba(251, 146, 60, 0.05), transparent);
+}
+
+.mod-type-unlock-mobile {
+  border-color: rgba(139, 92, 246, 0.5);
+  background: linear-gradient(to bottom right, rgba(139, 92, 246, 0.05), transparent);
+}
+
+.mod-action-buttons-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.mod-primary-action-mobile {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s;
+}
+
+.mod-secondary-actions-mobile {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.mod-secondary-action-mobile {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 2px solid var(--gaming-border);
+  background: transparent;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mod-secondary-action-mobile:hover {
+  border-color: #00d4ff;
+}
+
+.mod-tags-mobile {
+  margin-bottom: 1.5rem;
+}
+
+.mod-tags-title-mobile {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.mod-tags-grid-mobile {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.mod-tag-mobile {
+  padding: 0.375rem 0.75rem;
+  background: var(--gaming-card);
+  border: 1px solid var(--gaming-border);
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  transition: all 0.2s;
+}
+
+.mod-tag-mobile:hover {
+  border-color: #00d4ff;
+}
+
+.mod-tabs-container-mobile {
+  background: var(--gaming-card);
+  border: 1px solid var(--gaming-border);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  margin-bottom: 5rem;
+}
+
+.mod-tabs-nav-mobile {
+  display: flex;
+  border-bottom: 1px solid var(--gaming-border);
+  background: var(--gaming-darker);
+}
+
+.mod-tab-button-mobile {
+  flex: 1;
+  padding: 1rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.mod-tab-button-mobile:hover {
+  background: rgba(0, 212, 255, 0.1);
+}
+
+.mod-tab-button-mobile.active {
+  color: #00d4ff;
+  background: rgba(0, 212, 255, 0.1);
+  border-bottom: 2px solid #00d4ff;
+}
+
+.mod-tab-content-mobile {
+  padding: 1.5rem 1rem;
+}
+
+.mod-description-content-mobile {
+  line-height: 1.7;
+  white-space: pre-line;
+  color: hsl(var(--muted-foreground));
+}
+
+.mod-reviews-mobile {
+  padding: 0;
+}
+
+.mod-write-review-mobile {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.mod-review-button-mobile {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(45deg, #00d4ff, #8b5cf6);
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s;
+}
+
+.mod-reviews-list-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mod-review-card-mobile {
+  background: var(--gaming-card);
+  border: 1px solid var(--gaming-border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.mod-review-header-mobile {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  gap: 0.75rem;
+}
+
+.mod-review-user-mobile {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.mod-review-avatar-mobile {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #8b5cf6, #00d4ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.mod-review-info-mobile {
+  flex: 1;
+  min-width: 0;
+}
+
+.mod-review-username-mobile {
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+  word-break: break-word;
+}
+
+.mod-review-meta-mobile {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.mod-review-rating-mobile {
+  display: flex;
+  align-items: center;
+}
+
+.mod-review-date-mobile {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.mod-review-actions-mobile {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.mod-review-vote-mobile {
+  padding: 0.375rem;
+  border-radius: 0.375rem;
+  background: transparent;
+  border: none;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+}
+
+.mod-review-vote-mobile:hover {
+  background: var(--gaming-darker);
+}
+
+.mod-review-vote-mobile.upvoted {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.mod-review-vote-mobile.downvoted {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.mod-review-comment-mobile {
+  color: hsl(var(--muted-foreground));
+  line-height: 1.5;
+  font-size: 0.875rem;
+}
+
+.mod-requirements-mobile {
+  padding: 0;
+}
+
+.mod-requirements-grid-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mod-requirement-item-mobile {
+  background: var(--gaming-darker);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.mod-requirement-title-mobile {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #00d4ff;
+}
+
+.mod-requirement-value-mobile {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.875rem;
+}
+
+/* Modal Mobile Styles */
+.modal-mobile {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-content-mobile {
+  background: var(--gaming-card);
+  border: 1px solid var(--gaming-border);
+  border-radius: 0.75rem;
+  width: 100%;
+  max-width: 24rem;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+.modal-header-mobile {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-icon-mobile {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-title-mobile {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.modal-description-mobile {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.875rem;
+}
+
+.modal-form-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal-input-mobile {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--gaming-darker);
+  border: 1px solid var(--gaming-border);
+  border-radius: 0.5rem;
+  color: white;
+  transition: all 0.2s;
+}
+
+.modal-input-mobile:focus {
+  outline: none;
+  border-color: #00d4ff;
+}
+
+.modal-textarea-mobile {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--gaming-darker);
+  border: 1px solid var(--gaming-border);
+  border-radius: 0.5rem;
+  color: white;
+  resize: vertical;
+  min-height: 4rem;
+  transition: all 0.2s;
+}
+
+.modal-textarea-mobile:focus {
+  outline: none;
+  border-color: #00d4ff;
+}
+
+.modal-buttons-mobile {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.modal-button-mobile {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.modal-button-secondary-mobile {
+  background: var(--gaming-border);
+  color: white;
+  border: none;
+}
+
+.modal-button-secondary-mobile:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.modal-button-primary-mobile {
+  background: linear-gradient(45deg, #00d4ff, #8b5cf6);
+  color: white;
+  border: none;
+}
+
+.modal-button-danger-mobile {
+  background: #ef4444;
+  color: white;
+  border: none;
+}
+
+.modal-button-danger-mobile:hover {
+  background: #dc2626;
+}
+
+/* Mobile responsive breakpoints */
+@media (max-width: 768px) {
+  .mod-header-mobile {
+    padding: 1rem 0;
+  }
+  
+  .mod-media-display-mobile {
+    height: 240px;
+  }
+  
+  .mod-title-mobile {
+    font-size: 1.5rem;
+  }
+  
+  .mod-description-mobile {
+    font-size: 0.875rem;
+  }
+  
+  .mod-author-card-mobile {
+    padding: 0.75rem;
+  }
+  
+  .mod-tab-content-mobile {
+    padding: 1rem 0.75rem;
+  }
+  
+  .mod-review-card-mobile {
+    padding: 0.75rem;
+  }
+  
+  .modal-content-mobile {
+    padding: 1rem;
+  }
+  
+  .mod-thumbnail-mobile {
+    width: 5rem !important;
+    height: 5rem !important;
+    min-width: 5rem !important;
+    min-height: 5rem !important;
+    flex-shrink: 0 !important;
+  }
+  
+  .mod-thumbnail-mobile img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    border-radius: 0.5rem !important;
+  }
+  
+  .mod-tabs-nav-mobile {
+    overflow-x: auto;
+  }
+  
+  .mod-tab-button-mobile {
+    min-width: auto;
+    padding: 0.75rem 0.5rem;
+    font-size: 0.75rem;
+    min-height: 50px;
+  }
+}
+
+@media (max-width: 640px) {
+  .mod-media-display-mobile {
+    height: 200px;
+  }
+  
+  .mod-thumbnail-mobile {
+    width: 8rem !important;
+    height: 5rem !important;
+    min-width: 8rem !important;
+    min-height: 5rem !important;
+  }
+  
+  .mod-thumbnail-mobile img {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0.25rem !important;
+  }
+  
+  .mod-title-mobile {
+    font-size: 1.375rem;
+  }
+  
+  .mod-tabs-nav-mobile {
+    padding: 0;
+  }
+  
+  .mod-tab-button-mobile {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.8125rem;
+  }
+  
+  .mod-review-header-mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .mod-review-actions-mobile {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+/* Desktop styles for tabs */
+@media (min-width: 1024px) {
+  .mod-title-mobile {
+    text-align: left;
+    font-size: 2.5rem;
+  }
+  
+  .mod-description-mobile {
+    text-align: left;
+    font-size: 1.125rem;
+  }
+  
+  .mod-tags-title-mobile {
+    text-align: left;
+  }
+  
+  .mod-tags-grid-mobile {
+    justify-content: flex-start;
+  }
+  
+  .mod-media-display-mobile {
+    height: 450px;
+  }
+  
+  .mod-thumbnail-mobile {
+    width: 5.5rem;
+    height: 5.5rem;
+    min-width: 5.5rem;
+    min-height: 5.5rem;
+  }
+  
+  .mod-tabs-nav-mobile {
+    overflow-x: visible;
+  }
+  
+  .mod-tab-button-mobile {
+    padding: 1.5rem 2rem;
+    font-size: 1rem;
+    min-height: 70px;
+  }
+  
+  .mod-action-buttons-mobile {
+    flex-direction: row;
+    gap: 1rem;
+  }
+  
+  .mod-secondary-actions-mobile {
+    justify-content: flex-start;
+  }
+}

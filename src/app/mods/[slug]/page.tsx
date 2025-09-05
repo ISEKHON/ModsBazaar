@@ -650,23 +650,23 @@ export default function ModDetailPage() {
           </div>
         </section>
 
-        {/* Mod Header */}
+        {/* Mod Header - Mobile Responsive */}
         <section className="py-8 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12">
-              {/* Media Gallery */}
+            <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-12">
+              {/* Media Gallery - Mobile First */}
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
-                className="space-y-4"
+                className="mod-media-gallery-mobile"
               >
                 {/* Main Media Display */}
-                <div className="gaming-card rounded-xl overflow-hidden group">
+                <div className="mod-media-container-mobile gaming-card rounded-xl overflow-hidden group">
                   <div className="relative overflow-hidden">
                     {/* YouTube Video or Image Display */}
                     {activeImageIndex === 0 && mod.videoUrl ? (
-                      <div className="relative w-full h-96">
+                      <div className="mod-media-display-mobile relative">
                         <iframe
                           src={`https://www.youtube.com/embed/${getYouTubeVideoId(mod.videoUrl)}?autoplay=0&rel=0&modestbranding=1`}
                           title={`${mod.name} Preview Video`}
@@ -677,7 +677,7 @@ export default function ModDetailPage() {
                         />
                       </div>
                     ) : (
-                      <div className="relative w-full h-96 overflow-hidden">
+                      <div className="mod-media-display-mobile relative overflow-hidden">
                         <img
                           src={mod.videoUrl ? (mod.screenshots[activeImageIndex - 1] || mod.thumbnail) : (mod.screenshots[activeImageIndex] || mod.thumbnail)}
                           alt={mod.name}
@@ -708,32 +708,36 @@ export default function ModDetailPage() {
                   </div>
                 </div>
                 
-                {/* Thumbnail Navigation */}
-                <div className="flex space-x-3 overflow-x-auto pb-2">
+                {/* Thumbnail Navigation - Mobile Responsive */}
+                <div className="mod-thumbnails-mobile">
                   {/* Video Thumbnail (if video exists) */}
                   {mod.videoUrl && (
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setActiveImageIndex(0)}
-                      className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all duration-300 relative ${
-                        activeImageIndex === 0 
-                          ? 'border-neon-blue shadow-lg shadow-neon-blue/30' 
-                          : 'border-gaming-border hover:border-neon-purple'
+                      className={`mod-thumbnail-mobile ${
+                        activeImageIndex === 0 ? 'active' : ''
                       }`}
                     >
                       <img
                         src={`https://img.youtube.com/vi/${getYouTubeVideoId(mod.videoUrl)}/mqdefault.jpg`}
                         alt="Video Preview"
                         className="w-full h-full object-cover"
+                        onError={(e) => {
+                          console.log('Failed to load YouTube thumbnail')
+                          const img = e.target as HTMLImageElement
+                          img.src = mod.thumbnail || 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400&h=300&fit=crop'
+                        }}
+                        onLoad={() => console.log('YouTube thumbnail loaded')}
                       />
-                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                        <div className="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center">
+                      <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                        <div className="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center shadow-lg">
                           <Play className="h-3 w-3 text-white fill-current ml-0.5" />
                         </div>
                       </div>
                       <div className="absolute top-1 left-1">
-                        <span className="px-1.5 py-0.5 bg-red-600 text-white text-xs rounded font-semibold">
+                        <span className="px-1.5 py-0.5 bg-red-600 text-white text-xs rounded font-bold shadow-md">
                           VIDEO
                         </span>
                       </div>
@@ -747,10 +751,8 @@ export default function ModDetailPage() {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setActiveImageIndex(mod.videoUrl ? index + 1 : index)}
-                      className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all duration-300 ${
-                        activeImageIndex === (mod.videoUrl ? index + 1 : index)
-                          ? 'border-neon-blue shadow-lg shadow-neon-blue/30' 
-                          : 'border-gaming-border hover:border-neon-purple'
+                      className={`mod-thumbnail-mobile ${
+                        activeImageIndex === (mod.videoUrl ? index + 1 : index) ? 'active' : ''
                       }`}
                     >
                       <img
@@ -758,8 +760,11 @@ export default function ModDetailPage() {
                         alt={`${mod.name} ${index + 1}`}
                         className="w-full h-full object-cover"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).src = mod.thumbnail
+                          console.log(`Failed to load image: ${image}`)
+                          const img = e.target as HTMLImageElement
+                          img.src = mod.thumbnail || 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400&h=300&fit=crop'
                         }}
+                        onLoad={() => console.log(`Loaded image: ${image}`)}
                       />
                       <div className="absolute top-1 right-1">
                         <span className="w-5 h-5 bg-gaming-dark/80 backdrop-blur-sm rounded-full text-white text-xs flex items-center justify-center font-semibold">
@@ -771,50 +776,50 @@ export default function ModDetailPage() {
                 </div>
               </motion.div>
 
-              {/* Mod Info */}
+              {/* Mod Info - Mobile Responsive */}
               <motion.div
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
-                className="space-y-6"
+                className="mod-info-mobile space-y-6"
               >
-                <div>
-                  <h1 className="text-4xl font-gaming font-bold mb-4">
+                <div className="mod-header-mobile">
+                  <h1 className="mod-title-mobile text-2xl sm:text-3xl lg:text-4xl font-gaming font-bold mb-4">
                     <span className="bg-gradient-to-r from-neon-blue to-neon-purple bg-clip-text text-transparent">
                       {mod.name}
                     </span>
                   </h1>
-                  <p className="text-xl text-muted-foreground">
+                  <p className="mod-description-mobile text-lg sm:text-xl text-muted-foreground">
                     {mod.shortDescription}
                   </p>
                 </div>
 
-                {/* Author & Stats */}
-                <div className="gaming-card p-6 rounded-xl">
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 bg-gradient-to-r from-neon-purple to-neon-blue rounded-full flex items-center justify-center">
-                        <span className="text-white font-bold">
+                {/* Author & Stats - Mobile Card */}
+                <div className="mod-author-card-mobile gaming-card p-4 sm:p-6 rounded-xl">
+                  <div className="mod-author-header-mobile flex items-center justify-between mb-4 sm:mb-6">
+                    <div className="mod-author-info-mobile flex items-center space-x-3">
+                      <div className="mod-author-avatar-mobile w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-neon-purple to-neon-blue rounded-full flex items-center justify-center">
+                        <span className="text-white font-bold text-sm sm:text-base">
                           {(mod.author.name || mod.author.id?.username || 'Unknown').substring(0, 2).toUpperCase()}
                         </span>
                       </div>
-                      <div>
-                        <p className="font-semibold">{mod.author.name || mod.author.id?.username || 'Unknown Author'}</p>
-                        <p className="text-sm text-muted-foreground">Mod Creator</p>
+                      <div className="flex-1">
+                        <p className="font-semibold text-sm sm:text-base">{mod.author.name || mod.author.id?.username || 'Unknown Author'}</p>
+                        <p className="text-xs sm:text-sm text-muted-foreground">Mod Creator</p>
                       </div>
                     </div>
-                    <div className="text-right">
+                    <div className="mod-rating-mobile text-right">
                       <div className="flex items-center space-x-1">
-                        <Star className="h-5 w-5 text-yellow-400 fill-current" />
-                        <span className="text-lg font-bold">{mod.rating.toFixed(1)}</span>
-                        <span className="text-sm text-muted-foreground">({mod.ratingCount || 0})</span>
+                        <Star className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-400 fill-current" />
+                        <span className="text-base sm:text-lg font-bold">{mod.rating.toFixed(1)}</span>
+                        <span className="text-xs sm:text-sm text-muted-foreground">({mod.ratingCount || 0})</span>
                       </div>
                       {isLoggedIn && (
                         <motion.button
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                           onClick={() => setShowReviewModal(true)}
-                          className="mt-2 text-xs text-neon-blue hover:text-neon-purple transition-colors"
+                          className="mt-1 sm:mt-2 text-xs text-neon-blue hover:text-neon-purple transition-colors"
                         >
                           {userReview ? 'Edit Review' : 'Write Review'}
                         </motion.button>
@@ -822,9 +827,9 @@ export default function ModDetailPage() {
                     </div>
                   </div>
 
-                  {/* Edit/Admin Controls */}
+                  {/* Edit/Admin Controls - Mobile */}
                   {canEditMod && (
-                    <div className="flex items-center justify-center space-x-3 mb-6 p-4 bg-gaming-border/20 rounded-lg border border-gaming-border">
+                    <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-3 mb-4 sm:mb-6 p-3 sm:p-4 bg-gaming-border/20 rounded-lg border border-gaming-border">
                       <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -859,33 +864,35 @@ export default function ModDetailPage() {
                     </div>
                   )}
 
-                  <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-neon-blue">{downloadCount.toLocaleString()}</div>
-                      <div className="text-sm text-muted-foreground">Downloads</div>
+                  {/* Stats Grid - Mobile */}
+                  <div className="mod-stats-mobile grid grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
+                    <div className="mod-stat-mobile text-center p-3 sm:p-4 rounded-lg bg-gaming-darker">
+                      <div className="mod-stat-value-mobile text-lg sm:text-2xl font-bold text-neon-blue">{downloadCount.toLocaleString()}</div>
+                      <div className="mod-stat-label-mobile text-xs sm:text-sm text-muted-foreground">Downloads</div>
                     </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-neon-green">{mod.views.toLocaleString()}</div>
-                      <div className="text-sm text-muted-foreground">Views</div>
+                    <div className="mod-stat-mobile text-center p-3 sm:p-4 rounded-lg bg-gaming-darker">
+                      <div className="mod-stat-value-mobile text-lg sm:text-2xl font-bold text-neon-green">{mod.views.toLocaleString()}</div>
+                      <div className="mod-stat-label-mobile text-xs sm:text-sm text-muted-foreground">Views</div>
                     </div>
                   </div>
 
-                  <div className="space-y-3 text-sm">
-                    <div className="flex items-center justify-between">
+                  {/* Mod Details Grid - Mobile */}
+                  <div className="mod-details-grid-mobile space-y-2 sm:space-y-3 text-sm">
+                    <div className="mod-detail-row-mobile flex items-center justify-between py-2 border-b border-gaming-border">
                       <span className="text-muted-foreground">Released:</span>
                       <span>{new Date(mod.publishedAt).toLocaleDateString()}</span>
                     </div>
-                    <div className="flex items-center justify-between">
+                    <div className="mod-detail-row-mobile flex items-center justify-between py-2 border-b border-gaming-border">
                       <span className="text-muted-foreground">Last Updated:</span>
                       <span>{new Date(mod.updatedAt).toLocaleDateString()}</span>
                     </div>
-                    <div className="flex items-center justify-between">
+                    <div className="mod-detail-row-mobile flex items-center justify-between py-2 border-b border-gaming-border">
                       <span className="text-muted-foreground">Version:</span>
                       <span>{mod.version}</span>
                     </div>
-                    <div className="flex items-center justify-between">
+                    <div className="mod-detail-row-mobile flex items-center justify-between py-2">
                       <span className="text-muted-foreground">Access Type:</span>
-                      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                      <span className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${
                         mod.type === 'free' 
                           ? 'bg-gradient-to-r from-neon-green to-emerald-400 text-white' 
                           : mod.type === 'paid'
@@ -898,23 +905,23 @@ export default function ModDetailPage() {
                   </div>
                 </div>
 
-                {/* Mod Type Info Card */}
+                {/* Mod Type Info Card - Mobile */}
                 {mod.type !== 'free' && (
-                  <div className={`gaming-card p-4 rounded-xl border-2 ${
+                  <div className={`mod-type-info-mobile gaming-card p-3 sm:p-4 rounded-xl border-2 ${
                     mod.type === 'paid' 
-                      ? 'border-neon-orange/50 bg-gradient-to-br from-neon-orange/5 to-transparent' 
-                      : 'border-neon-purple/50 bg-gradient-to-br from-neon-purple/5 to-transparent'
+                      ? 'mod-type-paid-mobile border-neon-orange/50 bg-gradient-to-br from-neon-orange/5 to-transparent' 
+                      : 'mod-type-unlock-mobile border-neon-purple/50 bg-gradient-to-br from-neon-purple/5 to-transparent'
                   }`}>
                     {mod.type === 'paid' ? (
                       <div className="text-center">
-                        <h4 className="font-bold text-neon-orange mb-2 flex items-center justify-center gap-2">
-                          <Download className="h-5 w-5" />
+                        <h4 className="font-bold text-neon-orange mb-2 flex items-center justify-center gap-2 text-sm sm:text-base">
+                          <Download className="h-4 w-4 sm:h-5 sm:w-5" />
                           Premium Mod
                         </h4>
-                        <p className="text-sm text-muted-foreground mb-2">
+                        <p className="text-xs sm:text-sm text-muted-foreground mb-2">
                           This is a premium mod with advanced features and enhanced quality.
                         </p>
-                        <p className="text-lg font-bold text-neon-orange">${mod.price}</p>
+                        <p className="text-base sm:text-lg font-bold text-neon-orange">${mod.price}</p>
                       </div>
                     ) : (
                       <div className="text-center">
@@ -931,16 +938,16 @@ export default function ModDetailPage() {
                   </div>
                 )}
 
-                {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4">
+                {/* Action Buttons - Mobile Responsive */}
+                <div className="mod-action-buttons-mobile flex flex-col sm:flex-row gap-3 sm:gap-4">
                   {mod.type === 'free' || mod.canDownload ? (
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={handleDownload}
-                      className="flex-1 py-4 bg-gradient-to-r from-neon-green to-emerald-400 rounded-lg text-white font-bold text-lg hover-glow transition-all duration-300 flex items-center justify-center space-x-3"
+                      className="mod-primary-action-mobile flex-1 py-3 sm:py-4 bg-gradient-to-r from-neon-green to-emerald-400 rounded-lg text-white font-bold text-base sm:text-lg hover-glow transition-all duration-300 flex items-center justify-center space-x-2 sm:space-x-3"
                     >
-                      <Download className="h-6 w-6" />
+                      <Download className="h-5 w-5 sm:h-6 sm:w-6" />
                       <span>Download {mod.type === 'free' ? 'Free' : ''}</span>
                     </motion.button>
                   ) : mod.type === 'paid' ? (
@@ -948,9 +955,9 @@ export default function ModDetailPage() {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => setShowPurchaseModal(true)}
-                      className="flex-1 py-4 bg-gradient-to-r from-neon-orange to-yellow-400 rounded-lg text-white font-bold text-lg hover-glow transition-all duration-300 flex items-center justify-center space-x-3"
+                      className="mod-primary-action-mobile flex-1 py-3 sm:py-4 bg-gradient-to-r from-neon-orange to-yellow-400 rounded-lg text-white font-bold text-base sm:text-lg hover-glow transition-all duration-300 flex items-center justify-center space-x-2 sm:space-x-3"
                     >
-                      <Download className="h-6 w-6" />
+                      <Download className="h-5 w-5 sm:h-6 sm:w-6" />
                       <span>Buy for ${mod.price}</span>
                     </motion.button>
                   ) : (
@@ -960,9 +967,9 @@ export default function ModDetailPage() {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={handleDownload}
-                        className="flex-1 py-4 bg-gradient-to-r from-neon-green to-emerald-400 rounded-lg text-white font-bold text-lg hover-glow transition-all duration-300 flex items-center justify-center space-x-3"
+                        className="mod-primary-action-mobile flex-1 py-3 sm:py-4 bg-gradient-to-r from-neon-green to-emerald-400 rounded-lg text-white font-bold text-base sm:text-lg hover-glow transition-all duration-300 flex items-center justify-center space-x-2 sm:space-x-3"
                       >
-                        <Download className="h-6 w-6" />
+                        <Download className="h-5 w-5 sm:h-6 sm:w-6" />
                         <span>Download Unlocked</span>
                       </motion.button>
                     ) : (
@@ -970,56 +977,57 @@ export default function ModDetailPage() {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => setShowUnlockModal(true)}
-                        className="flex-1 py-4 bg-gradient-to-r from-neon-purple to-neon-pink rounded-lg text-white font-bold text-lg hover-glow transition-all duration-300 flex items-center justify-center space-x-3"
+                        className="mod-primary-action-mobile flex-1 py-3 sm:py-4 bg-gradient-to-r from-neon-purple to-neon-pink rounded-lg text-white font-bold text-base sm:text-lg hover-glow transition-all duration-300 flex items-center justify-center space-x-2 sm:space-x-3"
                       >
-                        <Unlock className="h-6 w-6" />
+                        <Unlock className="h-5 w-5 sm:h-6 sm:w-6" />
                         <span>Enter Code</span>
                       </motion.button>
                     )
                   )}
                   
-                  <div className="flex gap-2">
+                  {/* Secondary Actions - Mobile */}
+                  <div className="mod-secondary-actions-mobile flex gap-2 justify-center sm:justify-start">
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={handleToggleFavorite}
                       disabled={isCheckingFavorite}
-                      className={`p-4 rounded-lg border-2 transition-all duration-300 ${
+                      className={`mod-secondary-action-mobile p-3 sm:p-4 rounded-lg border-2 transition-all duration-300 ${
                         isLiked 
                           ? 'border-red-500 text-red-500 bg-red-500/10' 
                           : 'border-gaming-border hover:border-neon-blue'
                       } ${isCheckingFavorite ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
-                      <Heart className={`h-6 w-6 ${isLiked ? 'fill-current' : ''}`} />
+                      <Heart className={`h-5 w-5 sm:h-6 sm:w-6 ${isLiked ? 'fill-current' : ''}`} />
                     </motion.button>
                     
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={handleShare}
-                      className="p-4 rounded-lg border-2 border-gaming-border hover:border-neon-blue transition-all duration-300"
+                      className="mod-secondary-action-mobile p-3 sm:p-4 rounded-lg border-2 border-gaming-border hover:border-neon-blue transition-all duration-300"
                     >
-                      <Share2 className="h-6 w-6" />
+                      <Share2 className="h-5 w-5 sm:h-6 sm:w-6" />
                     </motion.button>
                     
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="p-4 rounded-lg border-2 border-gaming-border hover:border-red-500 transition-all duration-300"
+                      className="mod-secondary-action-mobile p-3 sm:p-4 rounded-lg border-2 border-gaming-border hover:border-red-500 transition-all duration-300"
                     >
-                      <Flag className="h-6 w-6" />
+                      <Flag className="h-5 w-5 sm:h-6 sm:w-6" />
                     </motion.button>
                   </div>
                 </div>
 
-                {/* Tags */}
-                <div>
-                  <h3 className="text-lg font-semibold mb-3">Tags</h3>
-                  <div className="flex flex-wrap gap-2">
+                {/* Tags - Mobile */}
+                <div className="mod-tags-mobile">
+                  <h3 className="mod-tags-title-mobile text-base sm:text-lg font-semibold mb-3 text-center sm:text-left">Tags</h3>
+                  <div className="mod-tags-grid-mobile flex flex-wrap gap-2 justify-center sm:justify-start">
                     {mod.tags.map((tag, index) => (
                       <span
                         key={index}
-                        className="px-3 py-1 bg-gaming-card border border-gaming-border rounded-full text-sm hover:border-neon-blue transition-colors cursor-pointer"
+                        className="mod-tag-mobile px-2 sm:px-3 py-1 bg-gaming-card border border-gaming-border rounded-full text-xs sm:text-sm hover:border-neon-blue transition-colors cursor-pointer"
                       >
                         {tag}
                       </span>
@@ -1031,12 +1039,12 @@ export default function ModDetailPage() {
           </div>
         </section>
 
-        {/* Detailed Information Tabs */}
-        <section className="py-12 px-4 sm:px-6 lg:px-8">
+        {/* Detailed Information Tabs - Mobile */}
+        <section className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
-            <div className="gaming-card rounded-xl overflow-hidden">
-              {/* Tab Navigation */}
-              <div className="flex border-b border-gaming-border">
+            <div className="mod-tabs-container-mobile gaming-card rounded-xl overflow-hidden">
+              {/* Tab Navigation - Mobile Scrollable */}
+              <div className="mod-tabs-nav-mobile flex border-b border-gaming-border overflow-x-auto">
                 {[
                   { id: 'description', label: 'Description', icon: FileText },
                   { id: 'reviews', label: `Reviews (${reviews.length})`, icon: MessageSquare },
@@ -1047,21 +1055,22 @@ export default function ModDetailPage() {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`flex items-center space-x-2 px-6 py-4 font-semibold transition-colors ${
+                      className={`mod-tab-button-mobile flex items-center space-x-1 sm:space-x-2 px-3 sm:px-6 py-3 sm:py-4 font-semibold transition-colors ${
                         activeTab === tab.id
-                          ? 'text-neon-blue border-b-2 border-neon-blue'
+                          ? 'active text-neon-blue border-b-2 border-neon-blue'
                           : 'text-muted-foreground hover:text-foreground'
                       }`}
                     >
-                      <IconComponent className="h-5 w-5" />
-                      <span>{tab.label}</span>
+                      <IconComponent className="h-4 w-4 sm:h-5 sm:w-5" />
+                      <span className="text-xs sm:text-sm">{tab.label}</span>
                     </button>
                   )
                 })}
               </div>
 
               {/* Tab Content */}
-              <div className="p-8">
+              {/* Tab Content - Mobile */}
+              <div className="mod-tab-content-mobile p-4 sm:p-8">
                 {activeTab === 'description' && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -1069,7 +1078,7 @@ export default function ModDetailPage() {
                     transition={{ duration: 0.5 }}
                   >
                     <div className="prose prose-invert max-w-none">
-                      <div className="whitespace-pre-line text-muted-foreground leading-relaxed">
+                      <div className="mod-description-content-mobile whitespace-pre-line text-muted-foreground leading-relaxed text-sm sm:text-base">
                         {mod.description}
                       </div>
                     </div>
@@ -1081,18 +1090,18 @@ export default function ModDetailPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="space-y-6"
+                    className="mod-reviews-mobile space-y-4 sm:space-y-6"
                   >
-                    {/* Write Review Button */}
+                    {/* Write Review Button - Mobile */}
                     {isLoggedIn && (
-                      <div className="text-center">
+                      <div className="mod-write-review-mobile text-center">
                         <motion.button
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => setShowReviewModal(true)}
-                          className="px-6 py-3 bg-gradient-to-r from-neon-blue to-neon-purple rounded-lg text-white font-semibold hover-glow transition-all duration-300 flex items-center space-x-2 mx-auto"
+                          className="mod-review-button-mobile px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-neon-blue to-neon-purple rounded-lg text-white font-semibold hover-glow transition-all duration-300 flex items-center space-x-2 mx-auto text-sm sm:text-base"
                         >
-                          <Edit3 className="h-4 w-4" />
+                          <Edit3 className="h-3 w-3 sm:h-4 sm:w-4" />
                           <span>{userReview ? 'Edit Your Review' : 'Write a Review'}</span>
                         </motion.button>
                       </div>
@@ -1113,25 +1122,25 @@ export default function ModDetailPage() {
                         </p>
                       </div>
                     ) : (
-                      /* Reviews List */
-                      <div className="space-y-4">
+                      /* Reviews List - Mobile */
+                      <div className="mod-reviews-list-mobile space-y-3 sm:space-y-4">
                         {reviews.map((review) => (
-                          <div key={review._id} className="gaming-card p-6 rounded-lg border border-gaming-border">
-                            <div className="flex items-start justify-between mb-4">
-                              <div className="flex items-center space-x-3">
-                                <div className="w-10 h-10 bg-gradient-to-r from-neon-purple to-neon-blue rounded-full flex items-center justify-center">
-                                  <span className="text-white font-bold text-sm">
+                          <div key={review._id} className="mod-review-card-mobile gaming-card p-4 sm:p-6 rounded-lg border border-gaming-border">
+                            <div className="mod-review-header-mobile flex items-start justify-between mb-3 sm:mb-4">
+                              <div className="mod-review-user-mobile flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
+                                <div className="mod-review-avatar-mobile w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-neon-purple to-neon-blue rounded-full flex items-center justify-center flex-shrink-0">
+                                  <span className="text-white font-bold text-xs sm:text-sm">
                                     {review.user?.username?.substring(0, 2).toUpperCase() || 'U'}
                                   </span>
                                 </div>
-                                <div>
-                                  <h4 className="font-semibold">{review.user?.username || 'Anonymous'}</h4>
-                                  <div className="flex items-center space-x-2">
-                                    <div className="flex items-center">
+                                <div className="mod-review-info-mobile flex-1 min-w-0">
+                                  <h4 className="mod-review-username-mobile font-semibold text-sm sm:text-base truncate">{review.user?.username || 'Anonymous'}</h4>
+                                  <div className="mod-review-meta-mobile flex items-center space-x-1 sm:space-x-2 flex-wrap">
+                                    <div className="mod-review-rating-mobile flex items-center">
                                       {[1, 2, 3, 4, 5].map((star) => (
                                         <Star
                                           key={star}
-                                          className={`h-4 w-4 ${
+                                          className={`h-3 w-3 sm:h-4 sm:w-4 ${
                                             star <= review.rating
                                               ? 'text-yellow-400 fill-current'
                                               : 'text-gray-600'
@@ -1139,48 +1148,51 @@ export default function ModDetailPage() {
                                         />
                                       ))}
                                     </div>
-                                    <span className="text-sm text-muted-foreground">
+                                    <span className="mod-review-date-mobile text-xs sm:text-sm text-muted-foreground">
                                       {formatTimeAgo(review.createdAt)}
                                     </span>
                                   </div>
                                 </div>
                               </div>
                               
-                              {/* Review Actions */}
-                              <div className="flex items-center space-x-2">
+                              {/* Review Actions - Mobile */}
+                              <div className="mod-review-actions-mobile flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
                                 <motion.button
                                   whileHover={{ scale: 1.1 }}
                                   whileTap={{ scale: 0.95 }}
                                   onClick={() => handleVoteReview(review._id, 'up')}
-                                  className={`p-2 rounded-lg transition-colors ${
+                                  className={`mod-review-vote-mobile p-1.5 sm:p-2 rounded-lg transition-colors ${
                                     review.userVote === 'up'
-                                      ? 'bg-green-500/20 text-green-400'
+                                      ? 'upvoted bg-green-500/20 text-green-400'
                                       : 'hover:bg-gaming-darker'
                                   }`}
                                 >
-                                  <ThumbsUp className="h-4 w-4" />
-                                  <span className="ml-1 text-xs">{review.upvotes || 0}</span>
+                                  <ThumbsUp className="h-3 w-3 sm:h-4 sm:w-4" />
+                                  <span className="ml-0.5 sm:ml-1 text-xs">{review.upvotes || 0}</span>
                                 </motion.button>
                                 <motion.button
                                   whileHover={{ scale: 1.1 }}
                                   whileTap={{ scale: 0.95 }}
                                   onClick={() => handleVoteReview(review._id, 'down')}
-                                  className={`p-2 rounded-lg transition-colors ${
+                                  className={`mod-review-vote-mobile p-1.5 sm:p-2 rounded-lg transition-colors ${
                                     review.userVote === 'down'
-                                      ? 'bg-red-500/20 text-red-400'
+                                      ? 'downvoted bg-red-500/20 text-red-400'
                                       : 'hover:bg-gaming-darker'
                                   }`}
                                 >
-                                  <ThumbsDown className="h-4 w-4" />
-                                  <span className="ml-1 text-xs">{review.downvotes || 0}</span>
+                                  <ThumbsDown className="h-3 w-3 sm:h-4 sm:w-4" />
+                                  <span className="ml-0.5 sm:ml-1 text-xs">{review.downvotes || 0}</span>
                                 </motion.button>
                               </div>
                             </div>
                             
+                            {/* Review Comment - Mobile */}
                             {review.comment && (
-                              <p className="text-muted-foreground leading-relaxed">
-                                {review.comment}
-                              </p>
+                              <div className="mod-review-comment-mobile mt-3 sm:mt-4">
+                                <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
+                                  {review.comment}
+                                </p>
+                              </div>
                             )}
                           </div>
                         ))}
@@ -1194,19 +1206,21 @@ export default function ModDetailPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="space-y-6"
+                    className="mod-requirements-mobile space-y-4 sm:space-y-6"
                   >
-                    <div>
-                      <h4 className="text-lg font-semibold mb-3">Game Version</h4>
-                      <p className="text-muted-foreground">{mod.game}</p>
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-semibold mb-3">Version</h4>
-                      <p className="text-muted-foreground">{mod.version}</p>
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-semibold mb-3">Category</h4>
-                      <p className="text-muted-foreground">{mod.category}</p>
+                    <div className="mod-requirements-grid-mobile">
+                      <div className="mod-requirement-item-mobile bg-gaming-darker p-3 sm:p-4 rounded-lg">
+                        <h4 className="mod-requirement-title-mobile text-sm sm:text-base font-semibold mb-2 text-neon-blue">Game Version</h4>
+                        <p className="mod-requirement-value-mobile text-muted-foreground text-sm sm:text-base">{mod.game}</p>
+                      </div>
+                      <div className="mod-requirement-item-mobile bg-gaming-darker p-3 sm:p-4 rounded-lg">
+                        <h4 className="mod-requirement-title-mobile text-sm sm:text-base font-semibold mb-2 text-neon-blue">Version</h4>
+                        <p className="mod-requirement-value-mobile text-muted-foreground text-sm sm:text-base">{mod.version}</p>
+                      </div>
+                      <div className="mod-requirement-item-mobile bg-gaming-darker p-3 sm:p-4 rounded-lg">
+                        <h4 className="mod-requirement-title-mobile text-sm sm:text-base font-semibold mb-2 text-neon-blue">Category</h4>
+                        <p className="mod-requirement-value-mobile text-muted-foreground text-sm sm:text-base">{mod.category}</p>
+                      </div>
                     </div>
                   </motion.div>
                 )}
@@ -1864,29 +1878,29 @@ export default function ModDetailPage() {
         </div>
       )}
 
-      {/* Unlock Modal */}
+      {/* Unlock Modal - Mobile */}
       {showUnlockModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="modal-mobile fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.3 }}
-            className="bg-gaming-card rounded-xl p-6 w-full max-w-md border border-gaming-border"
+            className="modal-content-mobile bg-gaming-card rounded-xl p-4 sm:p-6 w-full max-w-sm sm:max-w-md border border-gaming-border"
           >
-            <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-gradient-to-r from-neon-purple to-neon-pink rounded-full mx-auto mb-4 flex items-center justify-center">
-                <Unlock className="h-8 w-8 text-white" />
+            <div className="modal-header-mobile text-center mb-4 sm:mb-6">
+              <div className="modal-icon-mobile w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-neon-purple to-neon-pink rounded-full mx-auto mb-3 sm:mb-4 flex items-center justify-center">
+                <Unlock className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-white mb-2">Unlock Mod</h3>
-              <p className="text-muted-foreground">
+              <h3 className="modal-title-mobile text-xl sm:text-2xl font-bold text-white mb-2">Unlock Mod</h3>
+              <p className="modal-description-mobile text-muted-foreground text-sm sm:text-base">
                 Enter the unlock code to access <span className="text-neon-purple font-semibold">{mod?.name}</span>
               </p>
             </div>
 
-            <div className="space-y-4">
+            <div className="modal-form-mobile space-y-3 sm:space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-2">Unlock Code</label>
+                <label className="block text-xs sm:text-sm font-medium mb-2">Unlock Code</label>
                 <input
                   type="text"
                   value={enteredCode}
@@ -1894,7 +1908,7 @@ export default function ModDetailPage() {
                     setEnteredCode(e.target.value)
                     setCodeError('')
                   }}
-                  className="w-full px-4 py-3 bg-gaming-border border border-gaming-border rounded-lg focus:outline-none focus:border-neon-purple transition-colors text-center text-lg tracking-wider"
+                  className="modal-input-mobile w-full px-3 sm:px-4 py-2 sm:py-3 bg-gaming-border border border-gaming-border rounded-lg focus:outline-none focus:border-neon-purple transition-colors text-center text-base sm:text-lg tracking-wider"
                   placeholder="Enter unlock code"
                   onKeyPress={(e) => {
                     if (e.key === 'Enter') {
@@ -1903,13 +1917,13 @@ export default function ModDetailPage() {
                   }}
                 />
                 {codeError && (
-                  <p className="text-red-400 text-sm mt-2">{codeError}</p>
+                  <p className="text-red-400 text-xs sm:text-sm mt-2">{codeError}</p>
                 )}
               </div>
 
-              <div className="bg-gaming-darker rounded-lg p-4">
-                <h4 className="font-semibold text-neon-purple mb-2">How to get unlock codes:</h4>
-                <ul className="text-sm text-muted-foreground space-y-1">
+              <div className="bg-gaming-darker rounded-lg p-3 sm:p-4">
+                <h4 className="font-semibold text-neon-purple mb-2 text-sm sm:text-base">How to get unlock codes:</h4>
+                <ul className="text-xs sm:text-sm text-muted-foreground space-y-1">
                   <li>• Contact the mod creator directly</li>
                   <li>• Check mod description for instructions</li>
                   <li>• Follow the creator on social media</li>
@@ -1917,7 +1931,7 @@ export default function ModDetailPage() {
                 </ul>
               </div>
 
-              <div className="flex space-x-3">
+              <div className="modal-buttons-mobile flex space-x-2 sm:space-x-3">
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -1926,7 +1940,7 @@ export default function ModDetailPage() {
                     setEnteredCode('')
                     setCodeError('')
                   }}
-                  className="flex-1 py-3 bg-gaming-border hover:bg-gaming-border/80 rounded-lg text-white font-semibold transition-colors"
+                  className="modal-button-mobile modal-button-secondary-mobile flex-1 py-2 sm:py-3 bg-gaming-border hover:bg-gaming-border/80 rounded-lg text-white font-semibold transition-colors text-sm sm:text-base"
                 >
                   Cancel
                 </motion.button>
@@ -1935,7 +1949,7 @@ export default function ModDetailPage() {
                   whileTap={{ scale: 0.98 }}
                   onClick={handleUnlockCode}
                   disabled={!enteredCode.trim()}
-                  className="flex-1 py-3 bg-gradient-to-r from-neon-purple to-neon-pink rounded-lg text-white font-semibold hover-glow transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="modal-button-mobile modal-button-primary-mobile flex-1 py-2 sm:py-3 bg-gradient-to-r from-neon-purple to-neon-pink rounded-lg text-white font-semibold hover-glow transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                 >
                   Unlock
                 </motion.button>

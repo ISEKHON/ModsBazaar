@@ -395,21 +395,21 @@ export default function ProfilePage() {
   ]
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen profile-mobile-container">
       <Navbar />
       
       <main className="pt-16">
-        <section className="py-12 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
+        <section className="py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto profile-container-mobile">
             {/* Profile Header */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="gaming-card p-4 sm:p-6 lg:p-8 rounded-xl mb-8"
+              className="gaming-card p-4 sm:p-6 lg:p-8 rounded-xl mb-8 profile-card-mobile"
             >
-              <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-gradient-to-r from-neon-blue to-neon-purple rounded-full flex items-center justify-center text-lg sm:text-xl lg:text-2xl font-bold text-white mx-auto sm:mx-0">
+              <div className="flex flex-col sm:flex-row items-center sm:items-center space-y-4 sm:space-y-0 sm:space-x-6 profile-header-mobile sm:profile-header-desktop">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-gradient-to-r from-neon-blue to-neon-purple rounded-full flex items-center justify-center text-lg sm:text-xl lg:text-2xl font-bold text-white">
                   {currentUser?.username ? currentUser.username.substring(0, 2).toUpperCase() : 'U'}
                 </div>
                 
@@ -426,22 +426,23 @@ export default function ProfilePage() {
                     <span className="text-sm">{currentUser?.email || 'user@example.com'}</span>
                   </div>
                   
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 profile-stats-mobile">
                     <div className="text-center">
-                      <div className="text-lg sm:text-2xl font-bold text-neon-blue">{userModStats.totalDownloads.toLocaleString()}</div>
-                      <div className="text-xs sm:text-sm text-muted-foreground">Total Downloads</div>
+                      <div className="text-xl sm:text-2xl font-bold text-neon-blue">{userModStats.totalDownloads.toLocaleString()}</div>
+                      <div className="text-xs sm:text-sm text-muted-foreground">Downloads</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-lg sm:text-2xl font-bold text-neon-green">{userModStats.averageRating > 0 ? userModStats.averageRating.toFixed(1) : '0.0'}</div>
-                      <div className="text-xs sm:text-sm text-muted-foreground">Avg Rating</div>
+                      <div className="text-xl sm:text-2xl font-bold text-neon-green">{userModStats.averageRating > 0 ? userModStats.averageRating.toFixed(1) : '0.0'}</div>
+                      <div className="text-xs sm:text-sm text-muted-foreground">Rating</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-lg sm:text-2xl font-bold text-neon-purple">{userModStats.totalMods}</div>
-                      <div className="text-xs sm:text-sm text-muted-foreground">Uploaded Mods</div>
+                      <div className="text-xl sm:text-2xl font-bold text-neon-purple">{userModStats.totalMods}</div>
+                      <div className="text-xs sm:text-sm text-muted-foreground">Mods</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-lg sm:text-2xl font-bold text-neon-orange">{profileData?.joinedAt ? new Date(profileData.joinedAt).getFullYear() : new Date().getFullYear()}</div>
-                      <div className="text-xs sm:text-sm text-muted-foreground">Member Since</div>
+                      <div className="text-xl sm:text-2xl font-bold text-neon-orange">{profileData?.joinedAt ? new Date(profileData.joinedAt).getFullYear() : new Date().getFullYear()}</div>
+                      <div className="text-xs sm:text-sm text-muted-foreground">Since</div>
                     </div>
                   </div>
                 </div>
@@ -460,7 +461,7 @@ export default function ProfilePage() {
             <div className="grid lg:grid-cols-4 gap-8">
               {/* Mobile Tab Navigation */}
               <div className="lg:hidden mb-6">
-                <div className="gaming-card p-4 rounded-xl">
+                <div className="gaming-card p-4 rounded-xl profile-nav-mobile">
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     {tabs.map((tab) => {
                       const IconComponent = tab.icon
@@ -470,14 +471,14 @@ export default function ProfilePage() {
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => setActiveTab(tab.id)}
-                          className={`flex flex-col items-center space-y-2 p-3 rounded-lg transition-all duration-200 ${
+                          className={`flex flex-col items-center space-y-2 p-3 rounded-lg transition-all duration-200 tab-button-mobile ${
                             activeTab === tab.id
                               ? 'bg-gradient-to-r from-neon-blue to-neon-purple text-white'
                               : 'hover:bg-gaming-border text-muted-foreground hover:text-white'
                           }`}
                         >
                           <IconComponent className="h-4 w-4 sm:h-5 sm:w-5" />
-                          <span className="text-xs text-center">{tab.label}</span>
+                          <span className="text-xs text-center tab-label-mobile">{tab.label}</span>
                         </motion.button>
                       )
                     })}
@@ -546,9 +547,9 @@ export default function ProfilePage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="lg:col-span-3"
+                className="lg:col-span-3 profile-content-mobile"
               >
-                <div className="gaming-card p-8 rounded-xl">
+                <div className="gaming-card p-4 sm:p-8 rounded-xl mb-20 lg:mb-0 profile-card-mobile">
                   {activeTab === 'overview' && (
                     <div>
                       <h2 className="text-2xl font-bold mb-6">Dashboard Overview</h2>
@@ -663,79 +664,78 @@ export default function ProfilePage() {
                   )}
 
                   {activeTab === 'purchased' && (
-                    <div>
-                      <h2 className="text-2xl font-bold mb-6">Purchased Mods</h2>
+                    <div className="profile-tab-content">
+                      <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-center sm:text-left">Purchased Mods</h2>
                       {dataLoading ? (
                         <div className="flex items-center justify-center py-8">
                           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
                         </div>
                       ) : purchasedMods.length > 0 ? (
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                           {purchasedMods.map((mod) => (
-                            <div key={mod._id} className="bg-gaming-darker p-6 rounded-lg border border-gaming-border">
-                              <div className="flex items-center justify-between">
-                                <div className="flex-1">
-                                  <div className="flex items-center gap-4 mb-2">
-                                    {mod.thumbnail && (
-                                      <img 
-                                        src={mod.thumbnail} 
-                                        alt={mod.name}
-                                        className="w-16 h-16 object-cover rounded-lg border border-gaming-border"
-                                      />
+                            <div key={mod._id} className="purchased-card-mobile">
+                              <div className="purchased-header-mobile">
+                                {mod.thumbnail && (
+                                  <img 
+                                    src={mod.thumbnail} 
+                                    alt={mod.name}
+                                    className="purchased-thumbnail-mobile"
+                                  />
+                                )}
+                                <div className="purchased-info-mobile">
+                                  <h3 className="purchased-title-mobile">{mod.name}</h3>
+                                  <div className="purchased-meta-mobile">
+                                    {mod.category} • {mod.game}
+                                  </div>
+                                  <div className="purchased-meta-mobile">
+                                    {mod.downloads?.toLocaleString()} downloads
+                                    {mod.rating > 0 && (
+                                      <span> • ⭐ {mod.rating.toFixed(1)}</span>
                                     )}
-                                    <div>
-                                      <h3 className="text-lg font-semibold mb-1">{mod.name}</h3>
-                                      <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                                        <span>Category: {mod.category}</span>
-                                        <span>Game: {mod.game}</span>
-                                        <span>Downloads: {mod.downloads?.toLocaleString()}</span>
-                                        {mod.rating > 0 && (
-                                          <div className="flex items-center">
-                                            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
-                                            <span>{mod.rating.toFixed(1)}</span>
-                                          </div>
-                                        )}
-                                      </div>
-                                    </div>
-                                  </div>
-                                  {mod.description && (
-                                    <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
-                                      {mod.description}
-                                    </p>
-                                  )}
-                                </div>
-                                <div className="text-right ml-4">
-                                  <div className="text-lg font-bold text-neon-green mb-2">${mod.price}</div>
-                                  <div className="space-y-2">
-                                    <motion.button
-                                      whileHover={{ scale: 1.05 }}
-                                      whileTap={{ scale: 0.95 }}
-                                      onClick={() => window.open(`/mods/${mod.slug}`, '_blank')}
-                                      className="w-full px-4 py-2 bg-gradient-to-r from-neon-blue to-neon-purple rounded-lg text-white text-sm hover-glow transition-all duration-300 flex items-center justify-center gap-2"
-                                    >
-                                      <Download className="h-4 w-4" />
-                                      Download Again
-                                    </motion.button>
-                                    <motion.button
-                                      whileHover={{ scale: 1.05 }}
-                                      whileTap={{ scale: 0.95 }}
-                                      onClick={() => window.open(`/mods/${mod.slug}`, '_blank')}
-                                      className="w-full px-4 py-2 bg-gaming-border hover:bg-gaming-lighter rounded-lg text-white text-sm transition-all duration-300 flex items-center justify-center gap-2"
-                                    >
-                                      <ExternalLink className="h-4 w-4" />
-                                      View Details
-                                    </motion.button>
                                   </div>
                                 </div>
+                              </div>
+                              
+                              {mod.price && (
+                                <div className="purchased-price-mobile">
+                                  ${mod.price.toFixed(2)}
+                                </div>
+                              )}
+                              
+                              {mod.description && (
+                                <p className="purchased-description-mobile">
+                                  {mod.description}
+                                </p>
+                              )}
+                              
+                              <div className="purchased-actions-mobile">
+                                <motion.button
+                                  whileHover={{ scale: 1.05 }}
+                                  whileTap={{ scale: 0.95 }}
+                                  onClick={() => window.open(`/mods/${mod.slug}`, '_blank')}
+                                  className="purchased-button-mobile bg-neon-blue hover:bg-neon-blue/80 text-white transition-colors"
+                                >
+                                  <Download className="h-4 w-4" />
+                                  Download
+                                </motion.button>
+                                <motion.button
+                                  whileHover={{ scale: 1.05 }}
+                                  whileTap={{ scale: 0.95 }}
+                                  onClick={() => window.open(`/mods/${mod.slug}`, '_blank')}
+                                  className="purchased-button-mobile bg-gaming-card border border-gaming-border hover:border-neon-blue text-white transition-colors"
+                                >
+                                  <ExternalLink className="h-4 w-4" />
+                                  Details
+                                </motion.button>
                               </div>
                             </div>
                           ))}
                         </div>
                       ) : (
-                        <div className="text-center py-8 text-muted-foreground">
-                          <ShoppingBag className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                          <p>No purchased mods yet</p>
-                          <p className="text-sm">Browse our premium mods to get started!</p>
+                        <div className="text-center py-12">
+                          <ShoppingBag className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                          <h3 className="text-lg font-medium text-muted-foreground mb-2">No Purchased Mods</h3>
+                          <p className="text-muted-foreground">You haven't purchased any mods yet.</p>
                         </div>
                       )}
                     </div>
@@ -780,69 +780,67 @@ export default function ProfilePage() {
                   )}
 
                   {activeTab === 'downloads' && (
-                    <div>
-                      <h2 className="text-2xl font-bold mb-6">Download History</h2>
+                    <div className="profile-tab-content">
+                      <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-center sm:text-left">Download History</h2>
                       {dataLoading ? (
                         <div className="flex items-center justify-center py-8">
                           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
                         </div>
                       ) : downloadHistory.length > 0 ? (
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                           {downloadHistory.map((download, index) => (
-                            <div key={`${download._id}-${download.downloadedAt}-${index}`} className="bg-gaming-darker p-6 rounded-lg border border-gaming-border">
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <h3 className="text-lg font-semibold mb-2">{download.name}</h3>
-                                  <p className="text-sm text-muted-foreground">
-                                    Downloaded: {new Date(download.downloadedAt).toLocaleDateString()}
-                                  </p>
-                                  {download.downloadCount > 1 && (
-                                    <p className="text-sm text-muted-foreground">
-                                      Downloaded {download.downloadCount} times
-                                    </p>
-                                  )}
-                                </div>
-                                <div className="flex items-center space-x-3">
-                                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                                    download.type === 'purchased' 
-                                      ? 'bg-neon-purple/20 text-neon-purple' 
-                                      : download.type === 'unlock'
-                                      ? 'bg-neon-orange/20 text-neon-orange'
-                                      : 'bg-neon-green/20 text-neon-green'
-                                  }`}>
-                                    {download.type === 'purchased' ? 'Purchased' : download.type === 'unlock' ? 'Unlocked' : 'Free'}
-                                  </span>
-                                  <motion.button
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    className="px-4 py-2 bg-gaming-border rounded-lg hover:bg-gaming-border/80 transition-colors"
-                                  >
-                                    Download Again
-                                  </motion.button>
-                                </div>
+                            <div key={`${download._id}-${download.downloadedAt}-${index}`} className="download-card-mobile">
+                              <div className="download-header-mobile">
+                                <h3 className="download-title-mobile">{download.name}</h3>
+                                <span className="download-date-mobile">
+                                  {new Date(download.downloadedAt).toLocaleDateString()}
+                                </span>
+                              </div>
+                              {download.downloadCount > 1 && (
+                                <p className="text-xs text-muted-foreground">
+                                  Downloaded {download.downloadCount} times
+                                </p>
+                              )}
+                              <div className="download-meta-mobile">
+                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                  download.type === 'purchased' 
+                                    ? 'bg-neon-purple/20 text-neon-purple' 
+                                    : download.type === 'unlock'
+                                    ? 'bg-neon-orange/20 text-neon-orange'
+                                    : 'bg-neon-green/20 text-neon-green'
+                                }`}>
+                                  {download.type === 'purchased' ? 'Purchased' : download.type === 'unlock' ? 'Unlocked' : 'Free'}
+                                </span>
+                                <motion.button
+                                  whileHover={{ scale: 1.05 }}
+                                  whileTap={{ scale: 0.95 }}
+                                  className="download-button-mobile bg-neon-blue hover:bg-neon-blue/80 text-white transition-colors"
+                                >
+                                  Download Again
+                                </motion.button>
                               </div>
                             </div>
                           ))}
                         </div>
                       ) : (
-                        <div className="text-center py-8 text-muted-foreground">
-                          <Download className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                          <p>No downloads yet</p>
-                          <p className="text-sm">Start downloading mods to see them here!</p>
+                        <div className="text-center py-12">
+                          <Download className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                          <h3 className="text-lg font-medium text-muted-foreground mb-2">No Download History</h3>
+                          <p className="text-muted-foreground">You haven't downloaded any mods yet.</p>
                         </div>
                       )}
                     </div>
                   )}
 
                   {activeTab === 'submissions' && (
-                    <div>
-                      <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-2xl font-bold">My Submissions</h2>
+                    <div className="profile-tab-content">
+                      <div className="flex flex-col sm:flex-row items-center sm:items-center justify-between mb-4 sm:mb-6 space-y-4 sm:space-y-0">
+                        <h2 className="text-xl sm:text-2xl font-bold text-center sm:text-left">My Submissions</h2>
                         <motion.button
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                           onClick={() => router.push('/submit-mod')}
-                          className="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-neon-blue to-neon-purple rounded-lg text-white font-medium hover-glow transition-all duration-300"
+                          className="inline-flex items-center space-x-2 px-4 sm:px-6 py-3 bg-gradient-to-r from-neon-blue to-neon-purple rounded-lg text-white font-medium hover-glow transition-all duration-300 w-full sm:w-auto justify-center"
                         >
                           <Upload className="h-5 w-5" />
                           <span>Submit New Mod</span>
@@ -854,7 +852,7 @@ export default function ProfilePage() {
                           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neon-blue"></div>
                         </div>
                       ) : submissions.length > 0 ? (
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                           {submissions.map((submission) => {
                             const statusDisplay = submissionService.getStatusDisplay(submission.status)
                             const typeDisplay = submissionService.getTypeDisplay(submission.type)
@@ -865,46 +863,56 @@ export default function ProfilePage() {
                                 key={submission._id}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="bg-gaming-darker p-6 rounded-lg border border-gaming-border hover:border-neon-blue/50 transition-colors"
+                                className="submission-card-mobile hover:border-neon-blue/50 transition-colors"
                               >
-                                <div className="flex items-start justify-between mb-4">
-                                  <div className="flex-1">
-                                    <div className="flex items-center space-x-3 mb-2">
-                                      <h3 className="text-xl font-semibold">{submission.name}</h3>
-                                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusDisplay.bgColor} ${statusDisplay.color}`}>
+                                <div className="flex flex-col space-y-2">
+                                  <div className="flex flex-col space-y-2">
+                                    <div className="flex items-start justify-between">
+                                      <h3 className="submission-title-mobile flex-1 pr-2">{submission.name}</h3>
+                                    </div>
+                                    <div className="flex flex-wrap items-center gap-1">
+                                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusDisplay.bgColor} ${statusDisplay.color}`}>
                                         {statusDisplay.text}
                                       </span>
                                       <span className={`px-2 py-1 rounded text-xs font-medium ${typeDisplay.color}`}>
                                         {typeDisplay.icon} {typeDisplay.text}
                                       </span>
                                     </div>
-                                    <p className="text-muted-foreground mb-2">{submission.shortDescription}</p>
-                                    <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                                      <span>Version {submission.version}</span>
-                                      <span>•</span>
-                                      <span>{submission.game}</span>
-                                      <span>•</span>
-                                      <span>{submission.category}</span>
-                                      <span>•</span>
-                                      <span>Submitted {timeSince}</span>
-                                    </div>
                                   </div>
-                                  <div className="flex items-center space-x-2">
+                                  
+                                  <div className="submission-meta-mobile">
+                                    <span>Version {submission.version}</span>
+                                    <span> • </span>
+                                    <span>{submission.game}</span>
+                                    <span> • </span>
+                                    <span>{submission.category}</span>
+                                  </div>
+                                  
+                                  <div className="submission-url-mobile">
+                                    {submission.shortDescription}
+                                  </div>
+                                  
+                                  <div className="submission-meta-mobile">
+                                    Submitted {timeSince}
+                                  </div>
+                                  
+                                  <div className="submission-actions-mobile">
                                     {submission.status === 'pending' && (
                                       <motion.button
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
                                         onClick={() => router.push(`/submissions/${submission._id}/edit`)}
-                                        className="px-4 py-2 bg-gaming-card border border-gaming-border rounded-lg text-sm hover:border-neon-blue transition-colors"
+                                        className="submission-button-mobile bg-gaming-card border border-gaming-border hover:border-neon-blue transition-colors flex items-center justify-center space-x-1"
                                       >
-                                        <Edit className="h-4 w-4" />
+                                        <Edit className="h-3 w-3" />
+                                        <span>Edit</span>
                                       </motion.button>
                                     )}
                                     <motion.button
                                       whileHover={{ scale: 1.05 }}
                                       whileTap={{ scale: 0.95 }}
                                       onClick={() => setSelectedSubmission(submission)}
-                                      className="px-4 py-2 bg-neon-blue/20 border border-neon-blue/30 rounded-lg text-sm text-neon-blue hover:bg-neon-blue/30 transition-colors"
+                                      className="submission-button-mobile bg-neon-blue/20 border border-neon-blue/30 text-neon-blue hover:bg-neon-blue/30 transition-colors"
                                     >
                                       View Details
                                     </motion.button>
@@ -912,17 +920,17 @@ export default function ProfilePage() {
                                 </div>
 
                                 {submission.status === 'rejected' && submission.rejectionReason && (
-                                  <div className="mt-4 p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+                                  <div className="mt-3 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
                                     <div className="flex items-center space-x-2 text-red-400 mb-2">
-                                      <Shield className="h-4 w-4" />
-                                      <span className="font-medium">Rejection Reason</span>
+                                      <Shield className="h-3 w-3" />
+                                      <span className="text-xs font-medium">Rejection Reason</span>
                                     </div>
-                                    <p className="text-sm text-red-300">{submission.rejectionReason}</p>
+                                    <p className="text-xs text-red-300">{submission.rejectionReason}</p>
                                   </div>
                                 )}
 
                                 {submission.status === 'published' && submission.publishedModId && (
-                                  <div className={`mt-4 p-4 border rounded-lg ${
+                                  <div className={`mt-3 p-3 border rounded-lg ${
                                     submission.publishedModId && typeof submission.publishedModId === 'object' && submission.publishedModId.isActive !== false
                                       ? 'bg-green-500/10 border-green-500/30'
                                       : 'bg-yellow-500/10 border-yellow-500/30'
@@ -933,109 +941,100 @@ export default function ProfilePage() {
                                           ? 'text-green-400'
                                           : 'text-yellow-400'
                                       }`}>
-                                        <Package className="h-4 w-4" />
-                                        <span className="font-medium">
+                                        <Package className="h-3 w-3" />
+                                        <span className="text-xs font-medium">
                                           {submission.publishedModId && typeof submission.publishedModId === 'object' && submission.publishedModId.isActive !== false
                                             ? 'Published & Live'
                                             : 'Published but Unpublished'
                                           }
                                         </span>
                                       </div>
-                                      <div className="flex items-center space-x-2">
-                                        {/* View Published Mod Button - always show if published */}
-                                        <motion.button
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        onClick={() => {
-                                          console.log('Published Mod Data:', submission.publishedModId);
-                                          
-                                          // Handle both object and string cases
-                                          let slug = null;
-                                          if (typeof submission.publishedModId === 'object' && submission.publishedModId?.slug) {
-                                            slug = submission.publishedModId.slug;
-                                          } else if (typeof submission.publishedModId === 'string') {
-                                            // If it's just a string ID, we can try to navigate to /mods/id
-                                            // but this is not ideal as mods usually use slugs
-                                            console.warn('publishedModId is string, needs population');
-                                            toast.error('Unable to view published mod - data not properly loaded. Please refresh the page.');
-                                            return;
-                                          }
-                                          
-                                          if (slug) {
-                                            router.push(`/mods/${slug}`);
-                                          } else {
-                                            console.error('No slug found for published mod:', submission.publishedModId);
-                                            toast.error('Unable to view published mod - missing slug');
-                                          }
-                                        }}
-                                        className="px-4 py-2 bg-green-500/20 border border-green-500/30 rounded-lg text-sm text-green-400 hover:bg-green-500/30 transition-colors"
-                                      >
-                                        View Published Mod
-                                      </motion.button>
-                                      
-                                      {/* Edit Button */}
-                                      <motion.button
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        onClick={() => {
-                                          handleEditMod(submission);
-                                        }}
-                                        className="px-3 py-2 bg-neon-blue/20 border border-neon-blue/30 rounded-lg text-sm text-neon-blue hover:bg-neon-blue/30 transition-colors"
-                                        disabled={dataLoading}
-                                      >
-                                        <Edit className="h-4 w-4" />
-                                      </motion.button>
-                                      
-                                      {/* Publish/Unpublish Button - Based on isActive status */}
-                                      {submission.publishedModId && typeof submission.publishedModId === 'object' && submission.publishedModId.isActive !== false ? (
-                                        // Mod is currently published - show unpublish button
+                                      <div className="flex items-center space-x-1">
                                         <motion.button
                                           whileHover={{ scale: 1.05 }}
                                           whileTap={{ scale: 0.95 }}
                                           onClick={() => {
-                                            if (confirm(`Are you sure you want to unpublish "${submission.name}"? This will remove it from public view but keep your submission.`)) {
-                                              handleUnpublishMod(submission);
+                                            console.log('Published Mod Data:', submission.publishedModId);
+                                            
+                                            let slug = null;
+                                            if (typeof submission.publishedModId === 'object' && submission.publishedModId?.slug) {
+                                              slug = submission.publishedModId.slug;
+                                            } else if (typeof submission.publishedModId === 'string') {
+                                              console.warn('publishedModId is string, needs population');
+                                              toast.error('Unable to view published mod - data not properly loaded. Please refresh the page.');
+                                              return;
+                                            }
+                                            
+                                            if (slug) {
+                                              router.push(`/mods/${slug}`);
+                                            } else {
+                                              console.error('No slug found for published mod:', submission.publishedModId);
+                                              toast.error('Unable to view published mod - missing slug');
                                             }
                                           }}
-                                          className="px-3 py-2 bg-yellow-500/20 border border-yellow-500/30 rounded-lg text-sm text-yellow-400 hover:bg-yellow-500/30 transition-colors"
-                                          disabled={dataLoading}
-                                          title="Unpublish mod"
+                                          className="px-2 py-1 bg-green-500/20 border border-green-500/30 rounded text-xs text-green-400 hover:bg-green-500/30 transition-colors"
                                         >
-                                          <Pause className="h-4 w-4" />
+                                          View
                                         </motion.button>
-                                      ) : (
-                                        // Mod is unpublished - show republish button
+                                        
                                         <motion.button
                                           whileHover={{ scale: 1.05 }}
                                           whileTap={{ scale: 0.95 }}
                                           onClick={() => {
-                                            if (confirm(`Are you sure you want to republish "${submission.name}"? This will make it publicly visible again.`)) {
-                                              handleRepublishMod(submission);
+                                            handleEditMod(submission);
+                                          }}
+                                          className="px-2 py-1 bg-neon-blue/20 border border-neon-blue/30 rounded text-xs text-neon-blue hover:bg-neon-blue/30 transition-colors"
+                                          disabled={dataLoading}
+                                        >
+                                          <Edit className="h-3 w-3" />
+                                        </motion.button>
+                                        
+                                        {submission.publishedModId && typeof submission.publishedModId === 'object' && submission.publishedModId.isActive !== false ? (
+                                          <motion.button
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            onClick={() => {
+                                              if (confirm(`Are you sure you want to unpublish "${submission.name}"?`)) {
+                                                handleUnpublishMod(submission);
+                                              }
+                                            }}
+                                            className="px-2 py-1 bg-yellow-500/20 border border-yellow-500/30 rounded text-xs text-yellow-400 hover:bg-yellow-500/30 transition-colors"
+                                            disabled={dataLoading}
+                                            title="Unpublish mod"
+                                          >
+                                            <Pause className="h-3 w-3" />
+                                          </motion.button>
+                                        ) : (
+                                          <motion.button
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            onClick={() => {
+                                              if (confirm(`Are you sure you want to republish "${submission.name}"?`)) {
+                                                handleRepublishMod(submission);
+                                              }
+                                            }}
+                                            className="px-2 py-1 bg-blue-500/20 border border-blue-500/30 rounded text-xs text-blue-400 hover:bg-blue-500/30 transition-colors"
+                                            disabled={dataLoading}
+                                            title="Republish mod"
+                                          >
+                                            <Play className="h-3 w-3" />
+                                          </motion.button>
+                                        )}
+                                        
+                                        <motion.button
+                                          whileHover={{ scale: 1.05 }}
+                                          whileTap={{ scale: 0.95 }}
+                                          onClick={() => {
+                                            if (confirm(`Are you sure you want to delete "${submission.name}"?`)) {
+                                              handleDeleteMod(submission);
                                             }
                                           }}
-                                          className="px-3 py-2 bg-blue-500/20 border border-blue-500/30 rounded-lg text-sm text-blue-400 hover:bg-blue-500/30 transition-colors"
+                                          className="px-2 py-1 bg-red-500/20 border border-red-500/30 rounded text-xs text-red-400 hover:bg-red-500/30 transition-colors"
                                           disabled={dataLoading}
-                                          title="Republish mod"
+                                          title="Delete mod"
                                         >
-                                          <Play className="h-4 w-4" />
+                                          <Trash2 className="h-3 w-3" />
                                         </motion.button>
-                                      )}
-                                      
-                                      {/* Delete Button */}
-                                      <motion.button
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        onClick={() => {
-                                          if (confirm(`Are you sure you want to delete "${submission.name}"? This action cannot be undone.`)) {
-                                            handleDeleteMod(submission);
-                                          }
-                                        }}
-                                        className="px-3 py-2 bg-red-500/20 border border-red-500/30 rounded-lg text-sm text-red-400 hover:bg-red-500/30 transition-colors"
-                                        disabled={dataLoading}
-                                        title="Delete mod permanently"
-                                      >
-                                        <Trash2 className="h-4 w-4" />
-                                      </motion.button>
                                       </div>
                                     </div>
                                   </div>
@@ -1045,10 +1044,14 @@ export default function ProfilePage() {
                           })}
                         </div>
                       ) : (
-                        <div className="text-center py-12 text-muted-foreground">
-                          <Upload className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                          <p>No submissions yet</p>
-                          <p className="text-sm mb-6">Submit your first mod to get started!</p>
+                        <div className="text-center py-12">
+                          <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                          <h3 className="text-lg font-medium text-muted-foreground mb-2">No Submissions Yet</h3>
+                          <p className="text-muted-foreground mb-6">
+                            You haven't submitted any mods for review yet. 
+                            <br />
+                            Ready to share your creation with the community?
+                          </p>
                           <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
