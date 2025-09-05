@@ -93,14 +93,22 @@ api.interceptors.response.use(
           toast.error(data?.message || 'Bad request');
           break;
         case 401:
-          // Unauthorized - clear auth and redirect
           if (typeof window !== 'undefined') {
             localStorage.removeItem('auth_token');
             localStorage.removeItem('user_data');
-            // Redirect to login page
-            window.location.href = '/auth/login';
+            //window.location.href = '/login';
           }
-          toast.error('Session expired. Please login again.');
+          // Only show "Session expired" if NOT on login/register route
+          if (
+            !response.config.url?.includes('/auth/login') &&
+            !response.config.url?.includes('/auth/register')
+          ) {
+            toast.error('Session expired. Please login again.');
+          }
+          // Otherwise, show backend error (like "Invalid email or password")
+          else {
+            toast.error(data?.message || 'Unauthorized');
+          }
           break;
         case 403:
           toast.error('Access forbidden');
